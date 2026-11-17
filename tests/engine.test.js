@@ -31,7 +31,7 @@ test('큰 프레임은 계산 예산 뒤에도 남은 일수를 보존한다',()
  const s=life(1);s.queue=[];const clock=createClock(s);clock.tick(0);clock.tick(config.dayMs*300);assert.equal(s.day,120);clock.tick(config.dayMs*300);assert.equal(s.day,240);clock.tick(config.dayMs*300);assert.equal(s.day,300);
 });
 test('비활성 탭과 복귀, 장기간 부재는 건너뛰지 않는다',()=>{
- const s=life(2),c=createClock(s);c.tick(0);c.tick(100);c.visibility(false,100);const before=JSON.stringify(s);c.tick(999999);assert.equal(JSON.stringify(s),before);c.visibility(true,999999);c.tick(1000099);assert.equal(s.day,1);
+ const s=life(2),c=createClock(s);c.tick(0);c.tick(100);c.visibility(false,100);const before=JSON.stringify(s);c.tick(999999);assert.equal(JSON.stringify(s),before);c.visibility(true,999999);c.tick(999999+config.dayMs);assert.equal(s.day,1);
 });
 test('다음 결정까지 중간 소식과 월말 정산 보존, 안전 상한',()=>{
  const a=trainee(8),b=structuredClone(a);const r=nextDecision(a);runDays(b,config.maxSkipDays);assert.deepEqual(a,b);assert.equal(r.reason,'decision');assert(a.history.some(h=>h.category==='monthly'));assert(a.history.some(h=>h.category==='daily'));

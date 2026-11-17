@@ -1,6 +1,6 @@
 // Prototype tuning lives here. Expected news counts are stochastic, not quotas.
 export const config = {
-  dayMs: 60000 / 365, speeds: [1, 2, 4, 8], maxAge: 45,
+  dayMs: 240000 / 365, speeds: [1, 2, 4, 8], maxAge: 45,
   maxSkipDays: 366 * 2, frameDayBudget: 120,
   newsPerMonth: {entry:3, trainee:3, debut:5, group:6.5, solo:6, actor:3.5, producer:3, rest:2},
   probability: {auditionBase:.14, auditionWeight:.009, debutBase:.08, skillWeight:.007,
