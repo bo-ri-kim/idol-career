@@ -14,7 +14,7 @@ function decide(s,preference={}){const p=s.pending;assert(p);return choose(s,p.c
 function trainee(seed=1){const s=life(seed);for(let i=0;i<100&&['student','auditioning'].includes(s.stage);i++){nextDecision(s);decide(s,{entry_offer:'apply',contract:'accept',student_future:'continue'});}assert(['trainee','debut_candidate'].includes(s.stage));return s;}
 function group(seed=1){const s=trainee(seed);for(let i=0;i<100&&!['idol','ended'].includes(s.stage);i++){nextDecision(s);if(s.stage==='ended')break;decide(s,{final:'challenge',retry:'retry',health:'rest',late:'actor',acting:'support',future:'retire'});}assert.equal(s.stage,'idol');return s;}
 
-function toFinal(s){for(let n=0;n<5;n++){nextDecision(s);if(s.pending?.kind==='meet_trainee'){decide(s,{meet_trainee:'befriend'});continue;}return s.pending;}throw Error('평가 결정에 도달하지 못함');}
+function toFinal(s){for(let n=0;n<20;n++){nextDecision(s);if(['meet_trainee','relationship_moment'].includes(s.pending?.kind)){decide(s,{meet_trainee:'befriend',relationship_moment:'cooperate'});continue;}return s.pending;}throw Error('평가 결정에 도달하지 못함');}
 
 test('자동 날짜 진행, 1일 단위, 일시정지와 재생',()=>{
  const s=life(1),clock=createClock(s);clock.tick(0);clock.tick(config.dayMs*3+.01);assert.equal(s.day,3);
@@ -52,8 +52,8 @@ test('연결된 프로젝트와 경쟁 환경, 이전 훈련에 따른 평가 �
 });
 test('데뷔 실패가 즉시 종료되지 않고 재도전과 전향으로 이어진다',()=>{
  let failed=null,success=null;
- for(let seed=1;seed<30&&(!failed||!success);seed++){const s=trainee(seed);toFinal(s);decide(s);nextDecision(s);if(s.stage==='idol')success=s;if(s.pending?.kind==='retry')failed=s;}
- assert(failed);assert(success);assert.equal(failed.stage,'trainee');const count=failed.attempts;decide(failed,{retry:'retry'});nextDecision(failed);assert.equal(failed.pending.kind,'final');assert.equal(failed.attempts,count);decide(failed,{final:'actor'});assert.equal(failed.stage,'actor');assert(!failed.idolRetired);nextDecision(failed);assert.equal(failed.pending.kind,'acting');
+ for(let seed=1;seed<30&&(!failed||!success);seed++){const s=trainee(seed);toFinal(s);decide(s);for(let i=0;i<10;i++){nextDecision(s);if(s.stage==='idol'||s.pending?.kind==='retry')break;decide(s);}if(s.stage==='idol')success=s;if(s.pending?.kind==='retry')failed=s;}
+ assert(failed);assert(success);assert.equal(failed.stage,'trainee');const count=failed.attempts;decide(failed,{retry:'retry'});toFinal(failed);assert.equal(failed.pending.kind,'final');assert.equal(failed.attempts,count);decide(failed,{final:'actor'});assert.equal(failed.stage,'actor');assert(!failed.idolRetired);nextDecision(failed);assert.equal(failed.pending.kind,'acting');
 });
 test('글로벌 스타 경로, 그룹 탈퇴·솔로·아이돌 은퇴·연예계 은퇴 구분',()=>{
  const s=group(2);s.pending=null;s.playing=true;

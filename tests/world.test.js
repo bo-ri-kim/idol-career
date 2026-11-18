@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {createState,validState,save,readSave,KEY} from '../js/state.js';
 import {begin,choose,nextDecision,advanceDay,finish,scheduledAllowed,schedule,transition} from '../js/engine.js';
 import {news,newsAllowed,decisionAllowed} from '../js/events.js';
-import {getAgency,getProject,getGroup,getContract,getRivals,relationship,followupModel,resolveFollowup,validWorld,personAge} from '../js/world.js';
+import {getAgency,getProject,getGroup,getContract,getRivals,relationship,followupModel,resolveFollowup,validWorld,personAge,sharesWork,relationshipMoment,resolveRelationshipWork} from '../js/world.js';
 import {createClock} from '../js/clock.js';
 import {config} from '../js/config.js';
 const life=seed=>begin(createState('세계 검증','랜덤',seed));
@@ -58,4 +58,29 @@ test('그룹·전향·은퇴 이후에도 과거 인물과 프로젝트·계약 
  assert(s);const group=getGroup(s),agency=getAgency(s),people=Object.keys(s.world.people),groupId=group.id,contractId=s.contract;assert(group.memberIds.includes('player'));assert(agency.groupIds.includes(groupId));assert(group.memberIds.length>=2);assert(group.positions.player);assert.equal(group.status,'active');assert(validState(s));
  transition(s,'solo');assert.equal(s.group,null);assert(s.world.groups[groupId].formerMemberIds.includes('player'));assert(!s.world.groups[groupId].memberIds.includes('player'));assert.deepEqual(Object.keys(s.world.people),people);assert(validState(s));
  finish(s);assert.equal(s.world.contracts[contractId].status,'closed');assert(s.world.groups[groupId]);assert(Object.keys(s.world.projects).length);assert(validState(s));
+});
+
+function ongoing(){const s=meeting(),id=s.pending.data.personId;select(s,'befriend');nextDecision(s);assert.equal(s.pending.kind,'relationship_moment');assert.equal(s.pending.data.personId,id);return {s,id};}
+test('같은 동료와 반복 결정 → 준비 기간 → 실제 평가 → 다음 만남',()=>{
+ const {s,id}=ongoing(),before=s.stats.체력;assert(s.pending.title.includes(s.world.people[id].name));assert(validState(s));select(s,'cooperate');assert.equal(s.stats.체력,before-3);assert(s.queue.some(q=>q.type==='relationship-result'));const day=s.day;days(s,14);const result=s.history.find(h=>h.relationshipResult);assert(result);assert.equal(result.day,day+14);assert(result.personIds.includes(id));assert.notEqual(getProject(s).relationshipScore,0);assert(result.changes);assert(validState(s));nextDecision(s);assert.equal(s.pending.kind,'relationship_moment');assert.equal(s.pending.data.personId,id);
+});
+test('신뢰·경쟁이 다른 합동 준비는 같은 추첨에서도 성패와 프로젝트 점수를 바꾼다',()=>{
+ const {s,id}=ongoing(),a=structuredClone(s),b=structuredClone(s);a.relationships[id].trust=90;a.relationships[id].rivalry=0;b.relationships[id].trust=0;b.relationships[id].rivalry=90;
+ const first=resolveRelationshipWork(a,id,'cooperate',.5),second=resolveRelationshipWork(b,id,'cooperate',.5);assert(first.ok);assert(!second.ok);assert(getProject(a).relationshipScore>getProject(b).relationshipScore);
+});
+test('협력·독점·경계 선택의 비용과 관계 변화, 갈등에 맞는 후속 내용',()=>{
+ const {s,id}=ongoing();const a=structuredClone(s),b=structuredClone(s),c=structuredClone(s);select(a,'cooperate');select(b,'compete');select(c,'boundary');assert(a.stats.체력<c.stats.체력);assert(b.relationships[id].rivalry>a.relationships[id].rivalry);assert(b.relationships[id].conflicts.length);assert(c.relationships[id].rivalry<s.relationships[id].rivalry);assert(!c.queue.some(q=>q.type==='relationship-result'));assert.equal(relationshipMoment(b,id).topic,'conflict');
+});
+test('진행 중 평가도 저장 복원되고 v0.2.4 관계도 첫 만남 반복 없이 연결된다',()=>{
+ const {s,id}=ongoing();select(s,'compete');const store=memory();save(s,store);const restored=readSave(store).state;assert(restored);days(s,14);days(restored,14);assert.deepEqual(s,restored);
+ const old=meeting(),pid=old.pending.data.personId;select(old,'distance');old.queue=old.queue.filter(q=>q.type!=='relationship-followup');delete old.relationships[pid].nextMomentDay;save(old,store);const compatible=readSave(store).state;assert(compatible);nextDecision(compatible);assert.equal(compatible.pending.kind,'relationship_moment');assert.equal(compatible.pending.data.personId,pid);
+});
+test('공유 프로젝트·그룹이 없으면 반복 관계 사건과 준비 결과는 발생하지 않는다',()=>{
+ const student=life(1);assert(!scheduledAllowed(student,'relationship-moment'));assert(!decisionAllowed(student,'relationship_moment'));
+ const {s,id}=ongoing();select(s,'cooperate');const count=s.history.length;transition(s,'actor');assert(!sharesWork(s,id));days(s,14);assert(!s.history.slice(count).some(h=>h.relationshipResult));assert(validState(s));finish(s);assert(!scheduledAllowed(s,'relationship-result'));
+});
+
+test('같은 그룹으로 데뷔한 인물은 활동 결정과 실제 인기 변화까지 연결',()=>{
+ let found;for(let seed=1;seed<=30&&!found;seed++){const s=meeting(seed),id=s.pending.data.personId;select(s,'befriend');for(let turn=0;turn<25&&s.stage!=='ended';turn++){nextDecision(s);if(s.stage==='idol'){if(sharesWork(s,id))found={s,id};break;}if(s.pending)select(s,({final:'challenge',retry:'retry',late:'actor',health:'rest',future:'retire'})[s.pending.kind]||s.pending.choices[0].id);}}
+ assert(found);const {s,id}=found;for(let n=0;n<8&&s.pending?.kind!=='relationship_moment';n++){if(s.pending)select(s,s.pending.choices[0].id);nextDecision(s);}assert.equal(s.pending.kind,'relationship_moment');assert.equal(s.pending.data.personId,id);select(s,'cooperate');const before=s.popularity;for(let day=0;day<14;day++){if(s.pending)select(s,s.pending.choices[0].id);advanceDay(s);}assert(s.history.some(h=>h.relationshipResult&&h.stage==='idol'&&h.personIds.includes(id)));assert.notEqual(s.popularity,before);assert(validState(s));
 });

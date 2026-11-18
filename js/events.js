@@ -37,6 +37,7 @@ export const news = [
 export function newsAllowed(s,n){return s.stage!=='ended'&&n.trigger!=='scheduled'&&n.stages.includes(s.stage)&&(!(n.category==='agency')||!!getAgency(s))&&(!['clip','stage','broadcast','fan','quiet'].includes(n.id)||s.debuted||(s.stage==='actor'&&s.popularity>=5&&s.credits>=1))&&(!['clip','stage','broadcast'].includes(n.id)||(['idol','solo'].includes(s.stage)&&s.debuted&&!!getAgency(s)&&(s.stage!=='idol'||!!getGroup(s))))&&(!['mentor','join','schedule','room'].includes(n.id)||(['trainee','debut_candidate'].includes(s.stage)&&!!getAgency(s)));}
 const c=(id,label,hint='')=>({id,label,hint});
 export const decisions={
+ relationship_moment:{title:'동료와의 다음 선택',body:'함께하는 기회와 각자의 시간을 조율한다.',choices:[c('cooperate','함께 준비'),c('compete','단독 준비'),c('boundary','일정 조율')]},
  meet_trainee:{title:'새 연습생과의 첫 만남',body:'새로운 동료에게 어떻게 다가갈까?',choices:[c('befriend','먼저 다가가 친해진다','친밀·신뢰 상승 · 경쟁까지 사라지지는 않음'),c('compete','실력을 비교하며 견제한다','경쟁 의식 상승 · 신뢰와 갈등에 영향'),c('distance','예의를 지키며 거리를 둔다','서로 알아가는 속도를 늦춤')]},
  student_future:{title:'꿈을 찾아가는 시간',body:'평범한 일상을 지내며 여러 가능성을 만나왔다. 연예계의 기회를 더 열어 둘지, 다른 일상의 이야기를 이어갈지 생각해 본다.',choices:[c('continue','일상을 지내며 기회를 더 기다린다'),c('finish','다른 꿈을 향해 이야기를 마무리한다')]},
  entry_offer:{title:'일상에서 찾아온 제안',body:'새로운 기회를 검토한다.',choices:[c('apply','심사에 참여'),c('decline','학교생활을 이어간다')]},
@@ -55,6 +56,7 @@ export const decisions={
 export function decisionAllowed(s,kind){
  const school=s.stage==='student',preparing=['trainee','debut_candidate'].includes(s.stage)&&!!getAgency(s)&&!!getProject(s);
  const performing=['idol','solo'].includes(s.stage)&&s.debuted&&!!getAgency(s)&&(s.stage!=='idol'||!!getGroup(s));
+ if(kind==='relationship_moment')return preparing||(s.stage==='idol'&&performing);
  if(kind==='meet_trainee')return s.stage==='trainee'&&!!getAgency(s)&&!!getProject(s);
  if(kind==='entry_offer'||kind==='student_future')return school&&!s.agency;
  if(kind==='contract')return s.stage==='auditioning'&&!s.agency&&!!s.entryRoute;

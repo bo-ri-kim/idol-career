@@ -18,7 +18,7 @@ export function createState(name='',gender='랜덤',seed=Math.floor(Math.random(
 }
 export const KEY='idol-career-v04';
 export function save(s,storage=globalThis.localStorage){try{storage.setItem(KEY,JSON.stringify(s));return true;}catch{return false;}}
-const queuedTypes=new Set(['opportunity','audition-result','project-announce','project-candidates','project-cut','project-final','debut-result','retry','comeback','career','release','reaction','return','acting','acting-result','production','production-result','future','health-return','student-future','trainee-arrival','relationship-followup']);
+const queuedTypes=new Set(['opportunity','audition-result','project-announce','project-candidates','project-cut','project-final','debut-result','retry','comeback','career','release','reaction','return','acting','acting-result','production','production-result','future','health-return','student-future','trainee-arrival','relationship-followup','relationship-moment','relationship-result']);
 export function validState(s){
  try {
   if(!s||s.version!==4||!stages[s.stage]||!Number.isInteger(s.day)||s.day<0||s.day>366*33||!Number.isInteger(s.startAge)||s.startAge<13||s.startAge>18)return false;

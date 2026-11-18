@@ -109,7 +109,45 @@ export function validWorld(s){
  if(['trainee','debut_candidate'].includes(s.stage)&&(!getAgency(s)?.traineeIds.includes('player')||getProject(s)?.agencyId!==s.agency))return false;
  if(s.stage==='idol'&&(!getGroup(s)?.memberIds.includes('player')||getGroup(s)?.agencyId!==s.agency))return false;
  if(s.pending?.kind==='meet_trainee'&&(!w.people[s.pending.data?.personId]||w.people[s.pending.data.personId].agencyId!==s.agency||!s.rivals.includes(s.pending.data.personId)))return false;
- if(s.queue.some(q=>q.type==='relationship-followup'&&!w.people[q.data.personId]))return false;
+ if(s.pending?.kind==='relationship_moment'&&!sharesWork(s,s.pending.data?.personId))return false;
+ if(Object.values(s.relationships).some(r=>r.nextMomentDay!==undefined&&(!Number.isInteger(r.nextMomentDay)||r.nextMomentDay<0)))return false;
+ if(Object.values(w.projects).some(p=>p.relationshipScore!==undefined&&(!Number.isFinite(p.relationshipScore)||Math.abs(p.relationshipScore)>10)))return false;
+ if(s.queue.some(q=>['relationship-followup','relationship-moment','relationship-result'].includes(q.type)&&(!w.people[q.data.personId]||(q.type==='relationship-result'&&!['cooperate','compete'].includes(q.data.mode)))))return false;
  return true;
  }catch{return false;}
+}
+
+// A known person stays involved only while sharing a training project or a group.
+export function sharesWork(s,id){
+ const p=s.world.people[id];return !!p&&p.agencyId===s.agency&&(['trainee','debut_candidate'].includes(s.stage)?s.rivals.includes(id):s.stage==='idol'&&getGroup(s)?.memberIds.includes(id));
+}
+export function relationshipMoment(s,id){
+ const p=s.world.people[id],r=relationship(s,id),group=s.stage==='idol';
+ const conflict=r.rivalry>=40||r.trust<18||r.lastAction==='compete',pressure=!conflict&&r.closeness>=45;
+ const topic=conflict?'conflict':pressure?'boundary':'practice';
+ const title=conflict?`${p.name}와 겹친 ${group?'무대 파트':'평가 파트'}`:pressure?`${p.name}와 연습 시간의 경계`:`${p.name}의 ${group?'합동 무대':'합동 평가'} 제안`;
+ const body=conflict?`이전 경쟁이 남아 있는 ${p.name}도 같은 파트를 원한다. 이번 일을 어떻게 풀지에 따라 다음 평가와 관계가 달라진다.`:pressure?`${p.name}가 개인 연습까지 계속 함께하길 바란다. 친한 사이지만 체력과 각자의 준비 시간에는 한계가 있다.`:`${p.name}가 함께 준비하자고 제안했다. 서로 피드백을 주고받으면 완성도를 높일 수 있지만, 연습 시간을 쓰고 평가 기회도 나눠야 한다.`;
+ return {topic,title,body,choices:[
+ {id:'cooperate',label:conflict?'파트를 조율하고 함께 준비한다':pressure?'시간을 더 내어 함께 연습한다':'합동 준비를 받아들인다',hint:'신뢰 상승 · 체력 -3 · 14일 뒤 합동 평가, 성과와 기회를 나눔'},
+ {id:'compete',label:'내 파트를 확보하고 단독으로 준비한다',hint:'스타성 +1 · 신뢰 -6 · 경쟁 +10 · 14일 뒤 단독 평가'},
+ {id:'boundary',label:conflict?'따로 대화해 경쟁의 선을 정한다':'개인 시간을 지키고 일정만 조율한다',hint:'멘탈 +2 · 과열된 경쟁 완화 · 이번 추가 평가 기회는 포기'}]};
+}
+export function chooseRelationshipMoment(s,id,choice,eventId){
+ const r=relationship(s,id);r.lastAction=choice;r.nextMomentDay=s.day+65;
+ if(choice==='cooperate'){r.trust=clamp(r.trust+6);r.closeness=clamp(r.closeness+5);r.commitment='함께 준비 중';return {체력:-3};}
+ if(choice==='compete'){r.trust=clamp(r.trust-6);r.rivalry=clamp(r.rivalry+10);r.commitment='같은 기회를 두고 경쟁 중';r.conflicts.push({day:s.day,eventId,reason:'평가 파트를 나누지 않고 단독으로 준비'});return {스타성:1,멘탈:-1};}
+ r.trust=clamp(r.trust+2);r.rivalry=clamp(r.rivalry-8);r.commitment='개인 시간을 존중하기로 합의';return {멘탈:2};
+}
+export function resolveRelationshipWork(s,id,mode,roll=random(s)){
+ const p=s.world.people[id],r=relationship(s,id),group=s.stage==='idol',joint=mode==='cooperate';
+ const skill=(s.stats.보컬+s.stats.댄스+p.stats.보컬+p.stats.댄스)/4;
+ const chance=joint?clamp(.25+skill*.004+r.trust*.004-r.rivalry*.003,.15,.85):clamp(.30+(s.stats.스타성-p.score)*.006,.15,.75);
+ const ok=roll<chance,score=joint?(ok?4:-2):(ok?6:-4),project=getProject(s);
+ if(project)project.relationshipScore=clamp((project.relationshipScore||0)+score,-10,10);
+ if(joint){r.trust=clamp(r.trust+(ok?4:-4));p.score=clamp(p.score+(ok?2:1));}
+ else {r.rivalry=clamp(r.rivalry+(ok?4:7));p.score=clamp(p.score+2);}
+ r.commitment=joint?(ok?'합동 평가를 함께 통과한 동료':'합동 평가의 아쉬움을 함께 남김'):(ok?'단독 파트를 얻었지만 경쟁은 남음':'파트 경쟁에서 한 차례 밀림');
+ const playerEffects=group?{popularity:ok?(joint?2:3):-1,체력:-1}:{댄스:joint&&ok?1:.3,멘탈:ok?1:-2};
+ const text=`${p.name}와 ${joint?'함께 준비한':'각자 준비한'} ${group?'무대':'평가'}의 결과가 나왔다. ${joint?(ok?'서로 보완한 구간이 호평을 받았다. 신뢰가 쌓였지만 상대의 평가도 함께 올랐다.':'호흡이 맞지 않아 재연습이 필요했다. 가까운 사이여도 합동 준비가 늘 잘되지는 않았다.'):(ok?'원하던 단독 파트를 얻었다. 개인 성과는 커졌지만 파트를 놓친 상대와 경쟁은 더 깊어졌다.':'원하던 파트는 상대에게 돌아갔다. 단독 준비의 부담과 경쟁이 남았다.')} ${group?`활동 인기 ${playerEffects.popularity>0?'+':''}${playerEffects.popularity}.`:`이번 프로젝트 관계 평가 ${score>0?'+':''}${score}점 (누적 ${project?.relationshipScore||0}점).`}`;
+ return {ok,text,playerEffects,chance,score};
 }
