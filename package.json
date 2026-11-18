@@ -7,6 +7,7 @@
     "start": "python3 -m http.server 8080",
     "build:content": "node scripts/build-event-pack.mjs",
     "check:content": "node scripts/build-event-pack.mjs --check",
-    "qa:news": "node scripts/qa-news.mjs"
+    "qa:news": "node scripts/qa-news.mjs",
+    "qa:student": "node scripts/qa-student-life.mjs"
   }
 }

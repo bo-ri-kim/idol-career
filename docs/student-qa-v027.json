@@ -1,0 +1,69 @@
+{
+  "sourceMain": "3a51b9c965b065565ecb25045b0c6d8acc5f26c7",
+  "scope": [
+    "P0-1",
+    "P0-2",
+    "P0-3"
+  ],
+  "policy": "seeds 1..100 for dance/music/video/decline; only apply to the matching source route, accept contract; renew/continue for 7-year runs. Counts are game simulations, not measured real-world probabilities.",
+  "results": {
+    "seeds": 100,
+    "firstYearDays": 365,
+    "scenarios": {
+      "dance": {
+        "plays": 100,
+        "practiced": 100,
+        "publicPerformances": 100,
+        "publicPosts": 0,
+        "sufficientExposure": 0,
+        "sourceOffers": 104,
+        "contracted": 56,
+        "noIndustryContact": 16
+      },
+      "music": {
+        "plays": 100,
+        "practiced": 100,
+        "publicPerformances": 100,
+        "publicPosts": 0,
+        "sufficientExposure": 0,
+        "sourceOffers": 98,
+        "contracted": 42,
+        "noIndustryContact": 22
+      },
+      "video": {
+        "plays": 100,
+        "practiced": 100,
+        "publicPerformances": 0,
+        "publicPosts": 100,
+        "sufficientExposure": 62,
+        "sourceOffers": 63,
+        "contracted": 30,
+        "noIndustryContact": 52
+      },
+      "decline": {
+        "plays": 100,
+        "practiced": 0,
+        "publicPerformances": 0,
+        "publicPosts": 0,
+        "sufficientExposure": 0,
+        "sourceOffers": 0,
+        "contracted": 0,
+        "noIndustryContact": 100
+      }
+    },
+    "violations": {
+      "awayFamilyAtHome": 0,
+      "snsWithoutSource": 0,
+      "performanceWithoutSource": 0,
+      "orphanCause": 0,
+      "inactiveFollowup": 0
+    },
+    "longRun": {
+      "plays": 100,
+      "targetDays": 2555,
+      "reachedSevenYears": 100,
+      "endedEarlier": 0,
+      "sourceOffers": 87
+    }
+  }
+}

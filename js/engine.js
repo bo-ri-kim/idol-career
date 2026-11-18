@@ -1,3 +1,4 @@
+import {clubs,ensureStudentLife,studentAction,entryEvidence,evidenceRequired,evidenceEventId,growExposure,closeStudentActivity} from './student-life.js';
 import {selectNews} from './news-scheduler.js';
 import {rivalArc} from './event-pack.generated.js';
 import {clamp,random} from './random.js';
@@ -9,7 +10,7 @@ import {entryRoutes,pickRoute,entryProbability,routeDecision} from './entry.js';
 import {getAgency,getGroup,getProject,getRivals,getContract,signContract,createPerson,createProject,createGroup,syncCareerWorld,renewContract,linkPeople,relationship,relationshipChoice,resolveFollowup,relationshipEvaluation,sharesWork,relationshipMoment,chooseRelationshipMoment,resolveRelationshipWork} from './world.js';
 const active=s=>['idol','solo','actor','producer'].includes(s.stage);
 export function record(s,title,text,category='career',important=false,extra={}){
- const row={id:++s.serial,day:s.day,date:dateLabel(s.day),stage:s.stage,title,text,category,important,...extra};s.history.push(row);linkPeople(s,row);
+ const row={id:++s.serial,day:s.day,date:dateLabel(s.day),stage:s.stage,title,text,category,important,...extra};s.history.push(row);for(const id of row.causeIds||[]){const cause=s.history.find(h=>h.id===id);if(cause){cause.resultIds??=[];if(!cause.resultIds.includes(row.id))cause.resultIds.push(row.id);}}const informal={'sns-diary':'draft','news_school_music_016':'browse','news_school_music_007':'private_practice','dance-hobby':'private_practice'};if(informal[row.eventId])studentAction(s,row,informal[row.eventId]);linkPeople(s,row);
  if(important)s.milestones.push({day:s.day,title,text,stage:s.stage});return row;
 }
 // Map one reviewed pack arc onto real existing events; no second parallel story engine.
@@ -25,7 +26,7 @@ export function schedule(s,type,delay,data={},scope='career'){
  const item={id:++s.serial,type,due:s.day+delay,data,epoch:scope==='career'?s.epoch:null};
  s.queue.push(item);s.queue.sort((a,b)=>a.due-b.due||a.id-b.id);return item;
 }
-export function begin(s){if(!s.history.length){record(s,'평범한 하루의 시작',`${s.name}, ${s.age}세. 학교와 집을 오가며 친구, 가족과 일상을 보낸다. 어떤 꿈을 갖게 될지는 아직 모른다.`,'daily',true);planStudent(s,true);}return s;}
+export function begin(s){ensureStudentLife(s);if(!s.history.length){record(s,'평범한 하루의 시작',`${s.name}, ${s.age}세. 학교와 집을 오가며 친구, 가족과 일상을 보낸다. 어떤 꿈을 갖게 될지는 아직 모른다.`,'daily',true);planStudent(s,true);schedule(s,'student-activity-offer',31,{},'world');}return s;}
 const preparing=s=>['trainee','debut_candidate'].includes(s.stage);
 const schoolLife=s=>['student','auditioning'].includes(s.stage);
 function planStudent(s,first=false){
@@ -39,6 +40,7 @@ export function transition(s,to,{preserveQueue=false}={}){
  if(['trainee','debut_candidate'].includes(to)&&!getAgency(s))throw Error('소속사 계약이 필요합니다.');
  if(['idol','solo'].includes(to)&&(!s.debuted||(to==='idol'&&!getGroup(s))))throw Error('실제 데뷔와 그룹 정보가 필요합니다.');
  const from=s.stage;if(['idol','solo'].includes(from)&&['actor','producer'].includes(to))s.idolRetired=true;
+ if(!['student','auditioning'].includes(to))closeStudentActivity(s);
  syncCareerWorld(s,from,to);
  s.stage=to;s.epoch++;
  if(preserveQueue)s.queue.forEach(q=>{if(q.epoch!==null)q.epoch=s.epoch;});else s.queue=s.queue.filter(q=>q.epoch===null);
@@ -49,14 +51,14 @@ export function transition(s,to,{preserveQueue=false}={}){
 }
 function prompt(s,kind,data={}){
  if(s.pending||s.stage==='ended'||!decisionAllowed(s,kind))return false;
- let d=kind==='entry_offer'?routeDecision(data.route):decisions[kind];if(kind==='meet_trainee'){const person=s.world.people[data.personId];d={...d,title:`새 연습생 ${person.name}`,body:`${getAgency(s).name}에 ${person.name}가 합류했다. ${person.personality} 성향의 동료에게 어떻게 다가갈까?`};}if(kind==='relationship_moment')d=relationshipMoment(s,data.personId);s.pending={...d,choices:d.choices.filter(c=>!(kind==='career'&&s.stage==='solo'&&c.id==='solo')).map(c=>({...c})),kind,data,id:`decision-${++s.serial}`,day:s.day};s.playing=false;s.remainder=0;
- record(s,d.title,'결정이 필요한 순간이다. 선택할 때까지 시간은 멈춘다.','decision',true,data.personId?{personIds:[data.personId]}:{});return true;
+ let d=kind==='entry_offer'?routeDecision(data.route,s,data.sourceId):decisions[kind];if(kind==='meet_trainee'){const person=s.world.people[data.personId];d={...d,title:`새 연습생 ${person.name}`,body:`${getAgency(s).name}에 ${person.name}가 합류했다. ${person.personality} 성향의 동료에게 어떻게 다가갈까?`};}if(kind==='student_showcase'){const a=s.studentLife.activity;d={...d,title:`${clubs[a.kind].show}, 공개할까?`,body:`${clubs[a.kind].name}에서 합동 연습 ${a.practiceEventIds.length}회를 마쳤다. 공개 공연/영상의 원인이 되는 활동은 실제 기록으로 남는다. 공개 범위는 직접 정할 수 있다.`};}if(kind==='relationship_moment')d=relationshipMoment(s,data.personId);s.pending={...d,choices:d.choices.filter(c=>!(kind==='career'&&s.stage==='solo'&&c.id==='solo')).map(c=>({...c})),kind,data,id:`decision-${++s.serial}`,day:s.day};s.playing=false;s.remainder=0;
+ record(s,d.title,'결정이 필요한 순간이다. 선택할 때까지 시간은 멈춘다.','decision',true,{...(data.personId?{personIds:[data.personId]}:{}),...(data.causeIds?{causeIds:data.causeIds,actorIds:['player'],resultIds:[],expiresAt:data.expiresAt??null}:{} )});return true;
 }
 export function setPolicy(s,id){if(!policyIds(s.stage).includes(id)||s.stage==='ended'||s.pending)return false;s.policy=id;return true;}
 export function finish(s,reason='스스로 선택한 새로운 일상'){
  if(s.stage==='ended')return;
  if(['idol','solo'].includes(s.stage))s.idolRetired=true;
- syncCareerWorld(s,s.stage,'ended');s.project=null;s.rivals=[];s.stage='ended';if(!policyIds('ended').includes(s.policy))s.policy='balanced';s.playing=false;s.pending=null;s.queue=[];s.remainder=0;s.ending=reason;
+ closeStudentActivity(s);syncCareerWorld(s,s.stage,'ended');s.project=null;s.rivals=[];s.stage='ended';if(!policyIds('ended').includes(s.policy))s.policy='balanced';s.playing=false;s.pending=null;s.queue=[];s.remainder=0;s.ending=reason;
  record(s,s.debuted||s.agency?'나의 마지막 인사':'또 다른 일상으로',reason,'career',true);
 }
 function startProject(s,delay=0){
@@ -80,14 +82,26 @@ export function probability(s,type,mode=''){
 }
 export function choose(s,id,decisionId=s.pending?.id){
  const p=s.pending;if(!p||p.id!==decisionId||s.stage==='ended'||!decisionAllowed(s,p.kind))return false;
- const c=p.choices.find(c=>c.id===id);if(!c)return false;
+ const c=p.choices.find(c=>c.id===id);if(!c)return false;if(p.kind==='entry_offer'&&evidenceRequired(p.data.route)&&!entryEvidence(s,p.data.route,p.data.sourceId))return false;
  s.pending=null;s.decisionCount++;
- const choiceRecord=record(s,p.title,`선택: ${c.label}`,'decision',true,{choice:id,...(p.data.personId?{personIds:[p.data.personId]}:{})});
+ const choiceRecord=record(s,p.title,`선택: ${c.label}`,'decision',true,{choice:id,causeIds:p.data.causeIds||[],actorIds:['player'],resultIds:[],...(p.data.personId?{personIds:[p.data.personId]}:{})});
  switch(p.kind){
+ case 'student_activity':{
+  const life=ensureStudentLife(s);life.offeredAt=s.day;
+  if(id==='decline'){record(s,'방과 후의 다른 일상','이번에는 동아리에 가입하지 않았다. 관련 연습·공연·영상 공개 일정은 생기지 않는다.','daily',false,{causeIds:[choiceRecord.id],actorIds:['player'],resultIds:[]});break;}
+  const a={id:`activity-${++s.serial}`,kind:id,status:'active',startedAt:s.day,joinEventId:null,practiceEventIds:[]};life.activity=a;
+  const row=studentAction(s,record(s,`${clubs[id].name} 시작`,'가입을 마쳤다. 10일 뒤 첫 합동 연습이 있다. 지금은 공개 공연이나 게시물이 없다.','daily',true,{causeIds:[choiceRecord.id],actorIds:['player'],resultIds:[],activityId:a.id}),'join');a.joinEventId=row.id;
+  schedule(s,'student-activity-rehearsal',10,{activityId:a.id},'world');break;}
+ case 'student_showcase':{
+  const a=s.studentLife.activity;a.status='preparing';const causeIds=[choiceRecord.id,...a.practiceEventIds];
+  if(id==='skip'){a.status='completed';record(s,'연습으로 마무리하다','공연과 영상 게시 없이 이번 활동을 마쳤다. 실력과 함께한 시간은 남지만 외부 노출은 생기지 않았다.','daily',true,{causeIds,actorIds:['player'],resultIds:[]});break;}
+  a.visibility=id==='public'?'public':'friends';
+  record(s,id==='public'?'공개 발표 준비':'친구끼리 나눌 준비',`${clubs[a.kind].show}를 ${id==='public'?'외부에도 공개':'활동 친구들에게만 공유'}하기로 했다. 실제 발표는 7일 뒤다.`,'daily',false,{causeIds,actorIds:['player'],resultIds:[]});
+  schedule(s,'student-performance',7,{activityId:a.id,choiceEventId:choiceRecord.id},'world');break;}
  case 'entry_offer':{
   const route=p.data.route,r=entryRoutes[route];s.lastEntryRoute=route;
   if(id==='decline'){record(s,'제안을 거절하다',`${r.label} 제안은 정중히 거절했다. 친구와 가족이 있는 일상은 계속되고, 다른 기회도 열려 있다.`,'daily');s.routeHistory.push({route,day:s.day,result:'declined'});planStudent(s);}
-  else {s.entryRoute=route;s.entryAttempts++;s.routeHistory.push({route,day:s.day,result:'applied'});transition(s,'auditioning');effects(s,{money:-r.cost});schedule(s,'audition-result',r.days,{route});record(s,'심사 결과를 기다리며',`${r.label}에 참여했다. 약 ${r.days}일 뒤 결과가 전해진다. 그동안에도 학교생활은 이어진다.`,'career',true);}break;}
+  else {s.entryRoute=route;s.entryAttempts++;s.entrySourceId=p.data.sourceId||null;s.routeHistory.push({route,day:s.day,result:'applied',sourceId:s.entrySourceId,causeIds:p.data.causeIds||[]});transition(s,'auditioning');effects(s,{money:-r.cost});schedule(s,'audition-result',r.days,{route,sourceId:s.entrySourceId,causeIds:[choiceRecord.id]});record(s,'심사 결과를 기다리며',`${r.label}에 참여했다. 약 ${r.days}일 뒤 결과가 전해진다. 그동안에도 학교생활은 이어진다.`,'career',true,{causeIds:[choiceRecord.id],actorIds:['player'],resultIds:[],sourceId:s.entrySourceId});}break;}
  case 'contract':{
   const route=s.entryRoute,r=entryRoutes[route];
   if(id==='accept'){
@@ -125,6 +139,8 @@ export function choose(s,id,decisionId=s.pending?.id){
  if(s.stage!=='ended')s.playing=true;s.remainder=0;return true;
 }
 export function scheduledAllowed(s,type){
+ if(type==='student-activity-offer')return s.stage==='student'&&!s.agency;
+ if(['student-activity-rehearsal','student-showcase','student-performance','student-post-exposure'].includes(type))return schoolLife(s)&&!s.agency;
  if(type==='trainee-arrival')return s.stage==='trainee'&&!!getAgency(s)&&!!getProject(s);
  if(type==='relationship-followup')return preparing(s)&&!!getAgency(s);
  if(type==='relationship-moment'||type==='relationship-result')return (preparing(s)||s.stage==='idol')&&!!getAgency(s);
@@ -141,6 +157,31 @@ function dueEvent(s,q){
  const {type,data}=q;if(!scheduledAllowed(s,type))return;
  if(type.startsWith('project-')&&getProject(s)?.id!==data.projectId)return;
  switch(type){
+ case 'student-activity-offer':{const life=ensureStudentLife(s);if(life.offeredAt===null&&!life.activity&&s.age<=18){life.offeredAt=s.day;prompt(s,'student_activity');}break;}
+ case 'student-activity-rehearsal':{
+  const a=s.studentLife?.activity;if(!a||a.id!==data.activityId||a.status!=='active')break;
+  const causeIds=[a.practiceEventIds.at(-1)||a.joinEventId],change={[clubs[a.kind].skill]:1,체력:-1};effects(s,change);
+  const row=studentAction(s,record(s,`${clubs[a.kind].name} 합동 연습`,`${a.practiceEventIds.length+1}번째 연습에서 함께 박자와 표현을 맞췄다. 연습실 안의 활동이며 아직 공연·공개 게시가 아니다.`,'daily',false,{causeIds,actorIds:['player'],resultIds:[],activityId:a.id,changes:change}),'rehearsal');a.practiceEventIds.push(row.id);
+  if(a.practiceEventIds.length<2)schedule(s,'student-activity-rehearsal',14,{activityId:a.id},'world');else schedule(s,'student-showcase',7,{activityId:a.id},'world');break;}
+ case 'student-showcase':{const a=s.studentLife?.activity;if(a?.id!==data.activityId||a.status!=='active'||a.practiceEventIds.length<2)break;if(s.stage==='auditioning'){schedule(s,'student-showcase',7,data,'world');break;}prompt(s,'student_showcase',{activityId:a.id,causeIds:[...a.practiceEventIds]});break;}
+ case 'student-performance':{
+  const a=s.studentLife?.activity;if(a?.id!==data.activityId||a.status!=='preparing'||a.practiceEventIds.length<2)break;
+  const causeIds=[data.choiceEventId,...a.practiceEventIds],publicly=a.visibility==='public';
+  if(a.kind==='video'){
+   const id=`post-${++s.serial}`,title='동아리에서 함께 만든 연습 영상';
+   const row=studentAction(s,record(s,publicly?'연습 영상을 공개 게시하다':'친구에게만 영상을 공유하다',`‘${title}’을 ${publicly?'공개':'친구 전용'} 범위로 직접 게시했다. ${publicly?'조회·확산은 아직 집계되지 않았다.':'외부 노출이나 스카우트 근거가 되지 않는다.'}`,'daily',true,{causeIds,actorIds:['player'],resultIds:[],postId:id,activityId:a.id}),'post');
+   s.studentLife.posts[id]={id,title,kind:'video',visibility:a.visibility,uploadedAt:s.day,expiresAt:s.day+180,uploadEventId:row.id,activityId:a.id,views:0,exposureHistory:[]};
+   if(publicly)schedule(s,'student-post-exposure',7,{postId:id},'world');
+  }else{
+   const id=`performance-${++s.serial}`,observers=publicly?Math.floor(10+random(s)*50+s.stats[clubs[a.kind].skill]/4):0,title=clubs[a.kind].show;
+   const row=studentAction(s,record(s,publicly?`${title}를 마치다`:'친구끼리 발표를 마치다',publicly?`합동 연습을 바탕으로 ‘${title}’에 참여했다. 게임 내 관객 ${observers}명이 지켜봤다. 공개 공연 이력은 생겼지만 심사 연락과 합격이 보장되지는 않는다.`:'친구끼리 준비한 내용을 나눴다. 외부 공개 공연이나 온라인 게시물은 생기지 않았다.','daily',true,{causeIds,actorIds:['player'],resultIds:[],performanceId:id,activityId:a.id,observedAudience:observers}),'performance');
+   s.studentLife.performances[id]={id,title,kind:clubs[a.kind].outlet,visibility:a.visibility,performedAt:s.day,expiresAt:s.day+180,eventId:row.id,practiceEventIds:[...a.practiceEventIds],activityId:a.id,observers};
+  }
+  a.status='completed';break;}
+ case 'student-post-exposure':{
+  const post=s.studentLife?.posts[data.postId];if(!post||post.visibility!=='public'||post.exposureHistory.length)break;
+  post.views=growExposure(s,post);
+  const row=studentAction(s,record(s,'공개 영상의 첫 노출',`공개 게시한 ‘${post.title}’의 게임 내 누적 조회가 ${post.views}회로 집계됐다. ${post.views>=200?'노출 조건을 충족해 SNS 심사 제안 후보가 됐다. 연락과 합격은 별도 확률이다.':'아직 외부 심사 제안의 노출 기준에 이르지 않았다. 영상 활동의 경험은 남았다.'}`,'daily',true,{causeIds:[post.uploadEventId],actorIds:['player'],resultIds:[],postId:post.id,observedViews:post.views}),'exposure');post.exposureHistory.push({day:s.day,views:post.views,eventId:row.id});break;}
  case 'trainee-arrival':{
   if(s.agency!==data.agencyId)break;const person=createPerson(s,s.agency);s.rivals.push(person.id);getProject(s).participantIds.push(person.id);getAgency(s).changes++;
   record(s,'새 연습생 합류',`${getAgency(s).name}에 ${person.name}가 들어왔다. 같은 연습실에서 앞으로 자주 마주치게 된다.`,'agency',true,{personIds:[person.id],...rivalArcStep(s,1,person.id)});prompt(s,'meet_trainee',{personId:person.id});break;}
@@ -153,12 +194,12 @@ function dueEvent(s,q){
   if(!sharesWork(s,data.personId)||s.agency!==data.agencyId)break;
   const result=resolveRelationshipWork(s,data.personId,data.mode);effects(s,result.playerEffects);
   record(s,`${s.world.people[data.personId].name}와 준비한 결과`,result.text,'relationship',true,{personIds:[data.personId],changes:result.playerEffects,success:result.ok,relationshipResult:true});break;}
- case 'opportunity':if(s.stage==='student'){const route=pickRoute(s);if(route){s.lastEntryRoute=route;prompt(s,'entry_offer',{route});}else schedule(s,'opportunity',14);}break;
+ case 'opportunity':if(s.stage==='student'){const route=pickRoute(s);if(route){s.lastEntryRoute=route;const evidence=entryEvidence(s,route);prompt(s,'entry_offer',{route,sourceId:evidence?.id||null,expiresAt:evidence?.expiresAt||null,causeIds:evidence?[evidenceEventId(evidence)]:[]});}else schedule(s,'opportunity',14);}break;
  case 'student-future':prompt(s,'student_future');break;
  case 'audition-result':{
-  const route=data.route,r=entryRoutes[route],ok=random(s)<entryProbability(s,route);
+  const route=data.route,r=entryRoutes[route];if(evidenceRequired(route)&&!entryEvidence(s,route,data.sourceId||s.entrySourceId,true)){transition(s,'student');s.entryRoute=null;record(s,'심사 근거를 다시 확인하다','공개 활동 근거를 확인할 수 없어 심사를 진행하지 않았다. 학교생활로 돌아가 다른 기회를 기다린다.','daily',true);planStudent(s);break;}const ok=random(s)<entryProbability(s,route);
   s.routeHistory.push({route,day:s.day,result:ok?'passed':'failed'});
-  record(s,`${r.label} 심사 결과`,ok?'심사를 통과해 계약 조건을 검토할 수 있게 됐다. 아직 소속사 계약은 하지 않은 상태다.':'이번 심사에서는 선발되지 않았다. 학교로 돌아가 일상을 이어가며 다른 기회를 기다린다.','career',true,{success:ok,route});
+  record(s,`${r.label} 심사 결과`,ok?'심사를 통과해 계약 조건을 검토할 수 있게 됐다. 아직 소속사 계약은 하지 않은 상태다.':'이번 심사에서는 선발되지 않았다. 학교로 돌아가 일상을 이어가며 다른 기회를 기다린다.','career',true,{success:ok,route,sourceId:data.sourceId||null,causeIds:data.causeIds||[],actorIds:['player'],resultIds:[]});
   if(ok)prompt(s,'contract');else{effects(s,{멘탈:-2});transition(s,'student');s.entryRoute=null;planStudent(s);}break;}
  case 'project-announce':getProject(s).announced=true;getProject(s).phase='프로젝트 발표';record(s,'새 그룹 프로젝트',`${getAgency(s).name}에서 신규 그룹 데뷔 프로젝트를 발표했다. 선발 예정 인원은 ${getProject(s).slots}명이다.`,'agency',true);break;
  case 'project-candidates':{

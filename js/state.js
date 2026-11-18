@@ -1,3 +1,4 @@
+import {createStudentLife,ensureStudentLife,validStudentLife,evidenceRequired} from './student-life.js';
 import {validNewsMemory} from './news-scheduler.js';
 import {integer,random} from './random.js';
 import {policyIds,policies} from './config.js';
@@ -9,7 +10,7 @@ export const stages={student:'일반 학생',auditioning:'진입 심사 중',tra
 export const randomName=(rng=Math.random)=>['하린','시온','유진','서우','지안','도윤','수빈','이든'][integer(0,7,rng)];
 export function createState(name='',gender='랜덤',seed=Math.floor(Math.random()*4294967296)){
  const s={version:4,rng:seed>>>0,day:0,remainder:0,speed:1,playing:true,stage:'student',policy:'school',
-  world:createWorld(),relationships:{},contract:null,agency:null,group:null,rivals:[],project:null,projectSerial:0,epoch:0,queue:[],serial:0,pending:null,
+  residence:'family_home',studentLife:createStudentLife(),world:createWorld(),relationships:{},contract:null,agency:null,group:null,rivals:[],project:null,projectSerial:0,epoch:0,queue:[],serial:0,pending:null,
   history:[],milestones:[],seen:{},training:0,attempts:0,credits:0,popularity:0,peak:0,peakDay:0,
   idolRetired:false,debuted:false,entryRoute:null,lastEntryRoute:null,entryAttempts:0,routeHistory:[],interest:0,snsActivity:0,schoolParticipation:0,social:0,achievements:[],ending:null,releaseSerial:0,decisionCount:0,
   support:false,reviewScore:0,healthWarning:false,lastMonthStats:null};
@@ -19,7 +20,7 @@ export function createState(name='',gender='랜덤',seed=Math.floor(Math.random(
 }
 export const KEY='idol-career-v04';
 export function save(s,storage=globalThis.localStorage){try{storage.setItem(KEY,JSON.stringify(s));return true;}catch{return false;}}
-const queuedTypes=new Set(['opportunity','audition-result','project-announce','project-candidates','project-cut','project-final','debut-result','retry','comeback','career','release','reaction','return','acting','acting-result','production','production-result','future','health-return','student-future','trainee-arrival','relationship-followup','relationship-moment','relationship-result']);
+const queuedTypes=new Set(['opportunity','audition-result','project-announce','project-candidates','project-cut','project-final','debut-result','retry','comeback','career','release','reaction','return','acting','acting-result','production','production-result','future','health-return','student-future','trainee-arrival','relationship-followup','relationship-moment','relationship-result','student-activity-offer','student-activity-rehearsal','student-showcase','student-performance','student-post-exposure']);
 export function validState(s){
  try {
   if(!s||s.version!==4||!stages[s.stage]||!Number.isInteger(s.day)||s.day<0||s.day>366*33||!Number.isInteger(s.startAge)||s.startAge<13||s.startAge>18)return false;
@@ -30,6 +31,7 @@ export function validState(s){
   if(!Array.isArray(s.history)||!s.history.every((h,i)=>Number.isInteger(h.day)&&h.day>=0&&h.day<=s.day&&(!i||h.day>=s.history[i-1].day)&&typeof h.title==='string'&&typeof h.text==='string')||!Array.isArray(s.milestones))return false;
   if(!Array.isArray(s.queue)||!s.queue.every(q=>Number.isInteger(q.id)&&Number.isInteger(q.due)&&q.due>=0&&queuedTypes.has(q.type)&&q.data&&typeof q.data==='object'&&(q.epoch===null||Number.isInteger(q.epoch))))return false;
   if(!Array.isArray(s.rivals)||!s.rivals.every(id=>typeof id==='string')||!Array.isArray(s.achievements)||!s.seen||typeof s.seen!=='object')return false;
+  if(!validStudentLife(s))return false;
   if(!validNewsMemory(s))return false;
   if(!validWorld(s))return false;
   if(['trainee','debut_candidate'].includes(s.stage)&&(!getAgency(s)||!getProject(s)||!Number.isFinite(getProject(s).slots)||typeof getProject(s).phase!=='string'))return false;
@@ -42,6 +44,6 @@ export function validState(s){
   return true;
  }catch{return false;}
 }
-export function readSave(storage=globalThis.localStorage){try{const raw=storage.getItem(KEY);if(raw){const s=JSON.parse(raw);return validState(s)?{state:s,message:''}:{state:null,message:'저장 데이터를 읽을 수 없습니다. 새 게임을 시작해 주세요.'};}if(storage.getItem('idol-career-v03'))return {state:null,message:'세계·인물관계 저장 구조가 바뀌었습니다. 이전 이야기는 보관되며 새 게임을 시작해 주세요.'};if(storage.getItem('idol-career-v02'))return {state:null,message:'학생부터 시작하는 새 버전입니다. 이전 v0.2 저장은 보관되며 새 게임을 시작해 주세요.'};if(storage.getItem('idol-career-v01'))return {state:null,message:'v0.2는 시간이 흐르는 방식이 바뀌었습니다. v0.1 저장 대신 새 게임을 시작해 주세요.'};return {state:null,message:''};}catch{return {state:null,message:'저장 공간에 접근할 수 없거나 데이터가 손상됐습니다. 새 게임은 시작할 수 있습니다.'};}}
+export function readSave(storage=globalThis.localStorage){try{const raw=storage.getItem(KEY);if(raw){const s=JSON.parse(raw);let message='';if(validState(s)&&s.studentLife===undefined){ensureStudentLife(s);if((s.pending?.kind==='entry_offer'&&evidenceRequired(s.pending.data.route))||(s.stage==='auditioning'&&evidenceRequired(s.entryRoute))){s.pending=null;s.stage='student';s.entryRoute=null;s.epoch++;s.queue=s.queue.filter(q=>q.epoch===null);s.playing=false;message='이전 버전의 공개 활동 근거가 없는 제안은 보류했습니다. 기존 경력은 보존하며 다른 기회를 기다릴 수 있습니다.';}if(s.stage==='student'){s.queue.push({id:++s.serial,type:'student-activity-offer',due:s.day+14,data:{},epoch:null});if(!s.queue.some(q=>q.type==='opportunity'))s.queue.push({id:++s.serial,type:'opportunity',due:s.day+21,data:{},epoch:s.epoch});s.queue.sort((a,b)=>a.due-b.due||a.id-b.id);}}return validState(s)?{state:s,message}:{state:null,message:'저장 데이터를 읽을 수 없습니다. 새 게임을 시작해 주세요.'};}if(storage.getItem('idol-career-v03'))return {state:null,message:'세계·인물관계 저장 구조가 바뀌었습니다. 이전 이야기는 보관되며 새 게임을 시작해 주세요.'};if(storage.getItem('idol-career-v02'))return {state:null,message:'학생부터 시작하는 새 버전입니다. 이전 v0.2 저장은 보관되며 새 게임을 시작해 주세요.'};if(storage.getItem('idol-career-v01'))return {state:null,message:'v0.2는 시간이 흐르는 방식이 바뀌었습니다. v0.1 저장 대신 새 게임을 시작해 주세요.'};return {state:null,message:''};}catch{return {state:null,message:'저장 공간에 접근할 수 없거나 데이터가 손상됐습니다. 새 게임은 시작할 수 있습니다.'};}}
 export const load=(storage=globalThis.localStorage)=>readSave(storage).state;
 export function clear(storage=globalThis.localStorage){try{storage.removeItem(KEY);storage.removeItem('idol-career-v01');storage.removeItem('idol-career-v02');storage.removeItem('idol-career-v03');return true;}catch{return false;}}

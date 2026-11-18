@@ -22,7 +22,7 @@ test('자동 날짜 진행, 1일 단위, 일시정지와 재생',()=>{
  s.playing=true;clock.reset(5000);clock.tick(5000+config.dayMs);assert.equal(s.day,4);
 });
 test('중요 결정에서 즉시 정지: 남은 프레임 시간으로 선택을 넘어가지 않는다',()=>{
- const s=life(1),clock=createClock(s);clock.tick(0);const due=s.queue.find(q=>q.type==='opportunity').due;clock.tick(config.dayMs*(due+1));assert.equal(s.day,due);assert.equal(s.pending.kind,'entry_offer');assert.equal(s.playing,false);
+ const s=life(1),clock=createClock(s);clock.tick(0);const due=s.queue[0].due;clock.tick(config.dayMs*(due+1));assert.equal(s.day,due);assert.equal(s.pending.kind,'student_activity');assert.equal(s.playing,false);
  const before=JSON.stringify(s);clock.tick(30000);assert.equal(JSON.stringify(s),before);
  const id=s.pending.id;assert(!choose(s,'invalid',id));assert(choose(s,'decline',id));assert(!choose(s,'decline',id));assert.equal(s.playing,true);assert.equal(s.day,due);assert(!s.pending);
 });
@@ -92,8 +92,8 @@ test('불완전한 예약·결정 저장 데이터도 새 게임 안내로 복�
 function findRoute(route,wanted='passed'){
  for(let seed=1;seed<=150;seed++){
   const s=life(seed);
-  for(let turn=0;turn<9;turn++){
-   nextDecision(s);if(s.pending?.kind!=='entry_offer'){if(s.pending)decide(s,{student_future:'continue'});continue;}
+  for(let turn=0;turn<20;turn++){
+   nextDecision(s);if(s.pending?.kind!=='entry_offer'){if(s.pending)decide(s,{student_future:'continue',student_activity:route==='sns'?'video':route==='festival'?'dance':'decline',student_showcase:'public'});continue;}
    if(s.pending.data.route!==route){decide(s,{entry_offer:'decline'});continue;}
    const day=s.day;decide(s,{entry_offer:'apply'});assert.equal(s.stage,'auditioning');runDays(s,entryRoutes[route].days);
    if(s.routeHistory.some(h=>h.route===route&&h.day>=day&&h.result===wanted))return s;
@@ -119,7 +119,7 @@ test('초기 제안 거절 후 다른 경로를 만나고 계약 거절도 학�
  const accepted=findRoute('street');decide(accepted,{contract:'decline'});assert.equal(accepted.stage,'student');assert.equal(accepted.agency,null);assert.equal(accepted.project,null);nextDecision(accepted);assert.equal(accepted.pending.kind,'entry_offer');
 });
 test('오디션 실패는 학생 복귀, 다른 지원과 재도전 가능',()=>{
- const s=findRoute('audition','failed');assert.equal(s.stage,'student');assert(!s.pending);assert.equal(s.agency,null);assert(s.queue.some(q=>q.type==='opportunity'));nextDecision(s);decide(s,{entry_offer:'apply'});assert.equal(s.stage,'auditioning');assert(s.entryAttempts>=2);
+ const s=findRoute('audition','failed');assert.equal(s.stage,'student');assert(!s.pending);assert.equal(s.agency,null);assert(s.queue.some(q=>q.type==='opportunity'));for(let i=0;i<6;i++){nextDecision(s);if(s.pending.kind==='entry_offer')break;decide(s,{student_activity:'decline',student_showcase:'skip'});}decide(s,{entry_offer:'apply'});assert.equal(s.stage,'auditioning');assert(s.entryAttempts>=2);
 });
 test('모든 이벤트 조건 감사: 무계약 평가·미데뷔 팬덤·무그룹 활동 차단',()=>{
  const s=life(1);
@@ -128,5 +128,5 @@ test('모든 이벤트 조건 감사: 무계약 평가·미데뷔 팬덤·무그
  const student=life(1);student.queue=[];schedule(student,'project-announce',1,{projectId:1});schedule(student,'release',1,{release:1});runDays(student,2);assert(student.history.every(h=>h.category!=='agency'&&h.title!=='새 음반 발매'));
 });
 test('진입 경로는 서로 다른 조건과 확률을 갖고 선택만으로 합격 보장 안 함',()=>{
- const s=life(1);s.day=1;assert.deepEqual(eligibleRoutes(s),[]);s.day=130;s.age=16;s.interest=80;s.appearance=80;s.snsActivity=20;s.schoolParticipation=60;s.social=70;assert.equal(eligibleRoutes(s).length,6);const rates=Object.keys(entryRoutes).map(id=>entryProbability(s,id));assert(new Set(rates).size>=5);assert(rates.every(p=>p>0&&p<1));
+ const s=life(1);s.day=1;assert.deepEqual(eligibleRoutes(s),[]);s.day=130;s.age=16;s.interest=80;s.appearance=80;s.snsActivity=20;s.schoolParticipation=60;s.social=70;assert.equal(eligibleRoutes(s).length,4);assert(!eligibleRoutes(s).includes('sns'));assert(!eligibleRoutes(s).includes('festival'));assert(!eligibleRoutes(s).includes('busking'));const rates=Object.keys(entryRoutes).map(id=>entryProbability(s,id));assert(new Set(rates).size>=5);assert(rates.every(p=>p>0&&p<1));
 });

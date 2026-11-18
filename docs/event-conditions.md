@@ -94,3 +94,15 @@
 일반 소식은 더 이상 35일마다 재사용하지 않는다. `news-scheduler.js`에서 기존 29개+선별 48개를 조건 검사 후 커리어당 1회만 뽑는다. 주제별 14일 간격, 같은 주제 연속 차단, 최근 주제 가중치 감소를 적용한다. 조건 미충족 사유는 저장 상태의 `newsMemory.rejected`에 기록한다. 부족하면 기존 월말 기록으로 진행하며 무관한 사건을 생성하지 않는다.
 
 새 내부 소식은 활성 계약과 실제 준비 프로젝트가 필요하고, 그룹 소식은 실제 멤버, 작품 준비 소식은 현재 epoch의 발매 예약이 필요하다. 원본 rookie/veteran/hiatus 등은 임의 별칭으로 전부 허용하지 않는다. 세부 매핑·미지원 사유: CONTENT_INTEGRATION.md 및 content-pack-status.json.
+
+## v0.2.7 학생 인과 조건
+
+- family: residence가 dorm/independent일 때만. home-meal은 family_home만. 연습생 계약은 거주를 바꾸지 않는다.
+- SNS 후보: 실제 postId, 공개 video, 게시 날짜·게시 사건, 같은 post의 노출 사건/조회 200 이상, 후보 기간 180일. snsActivity·열람·개인 연습·초안·친구 전용만으로는 불가.
+- festival/busking 후보: 해당 유형의 실제 공개 공연, 관객 기록 15 이상, 선행 연습 2회, 공연 날짜·원인 ID. 참여도/달력만으로는 불가.
+- student_activity: 31일째 일반 학생·무소속·미가입. 춤/음악/영상/거절. 구버전 학생은 복원 후 14일 뒤 한 번 제안.
+- student-activity-rehearsal/student-showcase/student-performance: 같은 활동 ID와 단계·선행 연습 수 검사. 공개 선택은 student에서만 가능하고 심사 중이면 기다린다.
+- student-post-exposure: 실제 공개 게시물만, 한 차례. 소속사 진입/종료 시 미완료 학생 예약 종료.
+- 타임라인 causeIds/resultIds와 게시·공연·노출 ID를 저장 검증한다. 새 과거 영상이나 조회를 소급 생성하지 않는다.
+
+실제 적용/반례/미해결: PLAYTEST_FIX_REPORT_2026-11-18.md.

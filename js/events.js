@@ -7,7 +7,7 @@ export const news = [
  {id:'rap',stages:['trainee','solo','producer'],category:'daily',title:'노트 한 페이지',text:'떠오른 구절을 녹음했다. 다음 작업에 쓸 작은 재료가 생겼다.',effects:{랩:.7}},
  {id:'tired',stages:all,category:'daily',title:'긴 하루의 끝',text:'바쁜 일정 뒤 오늘은 평소보다 일찍 잠들었다.',effects:{체력:-1,멘탈:.3}},
  {id:'friend',stages:all,category:'daily',title:'동료와의 저녁',text:'비슷한 고민을 나누며 긴장을 조금 내려놓았다.',effects:{멘탈:1}},
- {id:'family',stages:[...all,'student','auditioning'],category:'daily',title:'집에서 온 연락',text:'가족과 짧게 통화했다. 돌아갈 곳이 있다는 감각이 힘이 됐다.',effects:{멘탈:1}},
+ {id:'family',requiresAway:true,stages:[...all,'student','auditioning'],category:'daily',title:'집에서 온 연락',text:'가족과 짧게 통화했다. 돌아갈 곳이 있다는 감각이 힘이 됐다.',effects:{멘탈:1}},
  {id:'mentor',stages:['trainee','debut_candidate'],category:'agency',title:'연습실의 피드백',text:'트레이너가 장점과 함께 다음 평가에서 보완할 점을 짚었다.',effects:{보컬:.4,댄스:.4}},
  {id:'join',stages:['trainee','debut_candidate'],category:'agency',title:'새로운 얼굴',text:'새 연습생이 합류했다. 연습실의 경쟁 구도가 조금 달라졌다.',environment:'rival',trigger:'scheduled'},
  {id:'schedule',stages:['trainee','debut_candidate'],category:'agency',title:'합동 연습 일정',text:'소속사가 합동 연습 시간을 늘렸다. 각자의 강점을 맞춰보는 날이 많아졌다.',effects:{댄스:.4,체력:-.6}},
@@ -25,18 +25,20 @@ export const news = [
  {id:'class',stages:['student','auditioning'],category:'daily',title:'교실의 하루',text:'모둠 과제를 마치고 친구들과 점심을 먹었다. 평소와 비슷한 하루가 지나갔다.',effects:{멘탈:.3}},
  {id:'exam',stages:['student','auditioning'],category:'daily',title:'시험 공부',text:'어려웠던 단원을 다시 풀어 봤다. 조금씩 이해되는 부분이 늘었다.',effects:{멘탈:.3}},
  {id:'school-friend',stages:['student','auditioning'],category:'daily',title:'친구와의 수다',text:'하굣길에 친구의 이야기를 들었다. 특별한 일 없이 함께 걷는 시간이 좋았다.',effects:{멘탈:.8}},
- {id:'home-meal',stages:['student','auditioning'],category:'daily',title:'가족의 식탁',text:'저녁을 함께 먹으며 학교에서 있었던 일을 나눴다.',effects:{멘탈:.7}},
+ {id:'home-meal',requiresHome:true,stages:[...all,'student','auditioning'],category:'daily',title:'가족의 식탁',text:'저녁을 함께 먹으며 학교에서 있었던 일을 나눴다.',effects:{멘탈:.7}},
  {id:'hobby-day',stages:['student','auditioning'],category:'daily',title:'방과 후 취미',text:'노래를 듣고 그림도 그리며 좋아하는 것을 찾아봤다.',effects:{스타성:.2}},
  {id:'school-festival',stages:['student','auditioning'],category:'daily',title:'학교 행사 준비',text:'반 친구들과 행사 준비를 나눠 맡았다. 연습보다 웃고 떠드는 시간이 더 길었다.',effects:{멘탈:.5}},
  {id:'music-interest',stages:['student','auditioning'],category:'daily',title:'자꾸 듣게 되는 노래',text:'마음에 드는 곡을 따라 불렀다. 음악을 좋아하는 마음이 조금 커졌다.',effects:{보컬:.3},studentEffect:'interest'},
  {id:'dance-hobby',stages:['student','auditioning'],category:'daily',title:'친구가 알려 준 춤',text:'쉬는 시간에 짧은 안무를 따라 했다. 틀린 동작에 함께 웃었다.',effects:{댄스:.3}},
- {id:'sns-diary',stages:['student','auditioning'],category:'daily',title:'일상을 남기는 영상',text:'취미로 찍은 짧은 영상을 올리고 친구들과 반응을 나눴다.',studentEffect:'sns'},
+ {id:'sns-diary',stages:['student','auditioning'],category:'daily',title:'공개 게시를 준비하며',text:'취미 영상을 어떻게 찍을지 메모했다. 아직 촬영하거나 공개 게시한 영상은 아니다.',studentEffect:'sns'},
  {id:'chance-meeting',stages:['student','auditioning'],category:'daily',title:'새로운 인연',text:'동아리에서 다른 반 친구와 이야기를 나눴다. 서로 좋아하는 것이 비슷했다.',effects:{멘탈:.5}},
 
 ];
-export function newsAllowed(s,n){return s.stage!=='ended'&&n.trigger!=='scheduled'&&n.stages.includes(s.stage)&&(!(n.category==='agency')||!!getAgency(s))&&(!['clip','stage','broadcast','fan','quiet'].includes(n.id)||s.debuted||(s.stage==='actor'&&s.popularity>=5&&s.credits>=1))&&(!['clip','stage','broadcast'].includes(n.id)||(['idol','solo'].includes(s.stage)&&s.debuted&&!!getAgency(s)&&(s.stage!=='idol'||!!getGroup(s))))&&(!['mentor','join','schedule','room'].includes(n.id)||(['trainee','debut_candidate'].includes(s.stage)&&!!getAgency(s)));}
+export function newsAllowed(s,n){return (!n.requiresHome||(s.residence??'family_home')==='family_home')&&(!n.requiresAway||['dorm','independent'].includes(s.residence))&&s.stage!=='ended'&&n.trigger!=='scheduled'&&n.stages.includes(s.stage)&&(!(n.category==='agency')||!!getAgency(s))&&(!['clip','stage','broadcast','fan','quiet'].includes(n.id)||s.debuted||(s.stage==='actor'&&s.popularity>=5&&s.credits>=1))&&(!['clip','stage','broadcast'].includes(n.id)||(['idol','solo'].includes(s.stage)&&s.debuted&&!!getAgency(s)&&(s.stage!=='idol'||!!getGroup(s))))&&(!['mentor','join','schedule','room'].includes(n.id)||(['trainee','debut_candidate'].includes(s.stage)&&!!getAgency(s)));}
 const c=(id,label,hint='')=>({id,label,hint});
 export const decisions={
+ student_activity:{title:'방과 후 무엇을 해 볼까?',body:'학교에서 새 활동을 안내했다. 가입하면 연습을 거쳐 공연이나 영상 공개 여부를 직접 정한다. 참여하지 않아도 일상과 다른 기회는 이어진다.',choices:[c('dance','댄스 동아리에 가입','안무 연습 → 교내 공연 → 학교 공연 심사 기회'),c('music','음악 방과후 활동에 참여','합주·보컬 연습 → 지도자 동반 거리 공연 → 심사 기회'),c('video','영상 동아리에 가입','촬영 연습 → 공개 범위 선택 → 실제 게시·확산 후 SNS 심사 기회'),c('decline','지금은 학교생활에 집중','가입하지 않으면 관련 후속 활동은 발생하지 않음')]},
+ student_showcase:{title:'준비한 활동을 보여 줄까?',body:'연습을 마쳤다. 공개할지, 가까운 친구에게만 보여 줄지 선택한다.',choices:[c('public','공개 발표에 참여','준비한 공연/영상만 외부 노출 가능 · 심사/합격은 별도 확률'),c('friends','친구끼리만 나눈다','활동 경험은 남지만 외부 캐스팅 근거로 사용하지 않음'),c('skip','발표하지 않고 연습으로 마무리','추가 공연·게시·노출 없음')]},
  relationship_moment:{title:'동료와의 다음 선택',body:'함께하는 기회와 각자의 시간을 조율한다.',choices:[c('cooperate','함께 준비'),c('compete','단독 준비'),c('boundary','일정 조율')]},
  meet_trainee:{title:'새 연습생과의 첫 만남',body:'새로운 동료에게 어떻게 다가갈까?',choices:[c('befriend','먼저 다가가 친해진다','친밀·신뢰 상승 · 경쟁까지 사라지지는 않음'),c('compete','실력을 비교하며 견제한다','경쟁 의식 상승 · 신뢰와 갈등에 영향'),c('distance','예의를 지키며 거리를 둔다','서로 알아가는 속도를 늦춤')]},
  student_future:{title:'꿈을 찾아가는 시간',body:'평범한 일상을 지내며 여러 가능성을 만나왔다. 연예계의 기회를 더 열어 둘지, 다른 일상의 이야기를 이어갈지 생각해 본다.',choices:[c('continue','일상을 지내며 기회를 더 기다린다'),c('finish','다른 꿈을 향해 이야기를 마무리한다')]},
@@ -56,6 +58,8 @@ export const decisions={
 export function decisionAllowed(s,kind){
  const school=s.stage==='student',preparing=['trainee','debut_candidate'].includes(s.stage)&&!!getAgency(s)&&!!getProject(s);
  const performing=['idol','solo'].includes(s.stage)&&s.debuted&&!!getAgency(s)&&(s.stage!=='idol'||!!getGroup(s));
+ if(kind==='student_activity')return school&&!s.agency&&!s.studentLife?.activity;
+ if(kind==='student_showcase')return school&&!s.agency&&s.studentLife?.activity?.status==='active'&&s.studentLife.activity.practiceEventIds.length>=2;
  if(kind==='relationship_moment')return preparing||(s.stage==='idol'&&performing);
  if(kind==='meet_trainee')return s.stage==='trainee'&&!!getAgency(s)&&!!getProject(s);
  if(kind==='entry_offer'||kind==='student_future')return school&&!s.agency;
