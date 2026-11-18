@@ -1,4 +1,4 @@
-# v0.2.3 사건 조건 감사
+# v0.2.4 사건 조건 감사
 
 ## 상태
 
@@ -22,7 +22,7 @@
 | breath, dance | trainee, debut_candidate, idol, solo | 학생용 취미 노래·춤 사건과 분리 |
 | rap | trainee, solo, producer | 녹음·작업 경험 |
 | tired, friend | trainee, debut_candidate, idol, solo, actor, producer | 기존 바쁜 일정·동료 문구는 학생에서 제외 |
-| mentor, join, schedule, room | trainee, debut_candidate | 소속사 계약 필수 |
+| mentor, schedule, room | trainee, debut_candidate | 소속사 계약 필수 |
 | clip, stage, broadcast | idol, solo | 실제 데뷔 필수. idol이면 그룹 필수 |
 | fan, quiet | idol, solo, actor | 아이돌은 실제 데뷔, 배우는 작품 경력 1 이상·인기 5 이상 |
 | script, set | actor | 배우 전향 이후 |
@@ -31,6 +31,8 @@
 
 일상 소식 선택 전 매번 해당 조건과 재사용 간격을 함께 검사한다. 학생 단계는 소속사 평가나 훈련 성과 소식을 사용하지 않는다.
 
+`join` 템플릿은 무작위 일반 소식에서 제외하고 실제 인물 생성 예약으로 대체했다. `friend`는 같은 소속사에 실제로 존재하는 인물을 재사용하고 관계·인물 이력을 연결한다. 모든 일반 소식은 `ended`에서 차단한다.
+
 ## 중요한 결정 전체
 
 | 종류 | 허용 단계·조건 |
@@ -38,6 +40,7 @@
 | entry_offer | student, 무소속. 경로별 조건과 추첨을 통과한 제안 한 개만 표시 |
 | contract | auditioning, 심사 합격 후, 아직 무소속 |
 | student_future | student, 18개월째 진로 회고. 이후 계속 기다리면 1년 뒤 재회고 |
+| meet_trainee | trainee, 유효한 소속사·프로젝트와 같은 소속사 신규 인물 ID 필수 |
 | final, late | trainee 또는 debut_candidate, 계약·프로젝트 필수 |
 | retry | trainee, 계약·탈락 후 프로젝트 기록 필요 |
 | comeback, career | idol 또는 solo, 데뷔·소속사 필수. idol이면 그룹 필수 |
@@ -47,6 +50,11 @@
 | health | ended 이외, 실제 컨디션 임계치 도달 시 |
 
 ## 예약 사건
+
+- trainee-arrival: 정규 trainee이며 소속사·프로젝트가 있을 때만 실제 인물을 생성한다. 소속사당 한 번 예약한다.
+- relationship-followup: 첫 만남 선택 25일 뒤, 현재 trainee/debut_candidate이고 해당 인물과 같은 소속사일 때만 실행한다. 전향·은퇴·다른 소속사라면 발생하지 않는다.
+- 두 세계 사건도 기존 큐를 사용한다. 세계 범위 예약은 커리어 epoch 대신 실행 시 실제 소속과 상태를 검사한다.
+
 
 - opportunity/student-future: student일 때만 실행한다.
 - audition-result: auditioning이며 실제 선택한 경로가 있을 때만 실행한다.

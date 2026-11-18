@@ -7,11 +7,14 @@ import {createClock} from '../js/clock.js';
 import {dateAt,dateLabel} from '../js/calendar.js';
 import {entryRoutes,eligibleRoutes,entryProbability} from '../js/entry.js';
 import {news,newsAllowed} from '../js/events.js';
+import {getProject,getRivals} from '../js/world.js';
 const life=seed=>begin(createState('검증','랜덤',seed));
 const runDays=(s,n)=>{for(let i=0;i<n&&!s.pending&&s.stage!=='ended';i++)advanceDay(s);};
 function decide(s,preference={}){const p=s.pending;assert(p);return choose(s,p.choices.some(c=>c.id===preference[p.kind])?preference[p.kind]:p.choices[0].id,p.id);}
 function trainee(seed=1){const s=life(seed);for(let i=0;i<100&&['student','auditioning'].includes(s.stage);i++){nextDecision(s);decide(s,{entry_offer:'apply',contract:'accept',student_future:'continue'});}assert(['trainee','debut_candidate'].includes(s.stage));return s;}
 function group(seed=1){const s=trainee(seed);for(let i=0;i<100&&!['idol','ended'].includes(s.stage);i++){nextDecision(s);if(s.stage==='ended')break;decide(s,{final:'challenge',retry:'retry',health:'rest',late:'actor',acting:'support',future:'retire'});}assert.equal(s.stage,'idol');return s;}
+
+function toFinal(s){for(let n=0;n<5;n++){nextDecision(s);if(s.pending?.kind==='meet_trainee'){decide(s,{meet_trainee:'befriend'});continue;}return s.pending;}throw Error('평가 결정에 도달하지 못함');}
 
 test('자동 날짜 진행, 1일 단위, 일시정지와 재생',()=>{
  const s=life(1),clock=createClock(s);clock.tick(0);clock.tick(config.dayMs*3+.01);assert.equal(s.day,3);
@@ -43,13 +46,13 @@ test('방침은 즉시 보상을 주지 않고 시간이 지나며 다른 성장
  const a=trainee(10);a.queue=[];const b=structuredClone(a),old={...a.stats};setPolicy(a,'vocal');setPolicy(b,'dance');assert.deepEqual(a.stats,old);runDays(a,90);runDays(b,90);assert(a.stats.보컬>b.stats.보컬+5);assert(b.stats.댄스>a.stats.댄스+5);assert.equal(a.policy,'vocal');
 });
 test('연결된 프로젝트와 경쟁 환경, 이전 훈련에 따른 평가 확률',()=>{
- const s=trainee(4),before=s.rivals.map(r=>r.score);nextDecision(s);assert.equal(s.pending.kind,'final');assert(s.project.candidate===true||s.project.candidate===false);
- const titles=s.history.map(h=>h.title);for(const title of ['새 그룹 프로젝트','데뷔조 후보 발표','데뷔조 인원 조정','최종 데뷔 평가'])assert(titles.includes(title));assert.equal(s.project.slots,3);assert.notDeepEqual(s.rivals.map(r=>r.score),before);
+ const s=trainee(4),before=getRivals(s).map(r=>r.score);toFinal(s);assert.equal(s.pending.kind,'final');assert(getProject(s).candidate===true||getProject(s).candidate===false);
+ const titles=s.history.map(h=>h.title);for(const title of ['새 그룹 프로젝트','데뷔조 후보 발표','데뷔조 인원 조정','최종 데뷔 평가'])assert(titles.includes(title));assert.equal(getProject(s).slots,3);assert.notDeepEqual(getRivals(s).map(r=>r.score),before);
  const p=probability(s,'debut');s.stats.보컬=100;s.stats.댄스=100;s.stats.스타성=100;s.reviewScore=100;assert(probability(s,'debut')>p);
 });
 test('데뷔 실패가 즉시 종료되지 않고 재도전과 전향으로 이어진다',()=>{
  let failed=null,success=null;
- for(let seed=1;seed<30&&(!failed||!success);seed++){const s=trainee(seed);nextDecision(s);decide(s);nextDecision(s);if(s.stage==='idol')success=s;if(s.pending?.kind==='retry')failed=s;}
+ for(let seed=1;seed<30&&(!failed||!success);seed++){const s=trainee(seed);toFinal(s);decide(s);nextDecision(s);if(s.stage==='idol')success=s;if(s.pending?.kind==='retry')failed=s;}
  assert(failed);assert(success);assert.equal(failed.stage,'trainee');const count=failed.attempts;decide(failed,{retry:'retry'});nextDecision(failed);assert.equal(failed.pending.kind,'final');assert.equal(failed.attempts,count);decide(failed,{final:'actor'});assert.equal(failed.stage,'actor');assert(!failed.idolRetired);nextDecision(failed);assert.equal(failed.pending.kind,'acting');
 });
 test('글로벌 스타 경로, 그룹 탈퇴·솔로·아이돌 은퇴·연예계 은퇴 구분',()=>{

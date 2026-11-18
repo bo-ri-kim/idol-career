@@ -1,3 +1,4 @@
+import {getAgency,getGroup,getProject} from './world.js';
 const all=['trainee','debut_candidate','idol','solo','actor','producer'];
 // General reports never stop the clock. Effects happen only when a report occurs.
 export const news = [
@@ -8,7 +9,7 @@ export const news = [
  {id:'friend',stages:all,category:'daily',title:'동료와의 저녁',text:'비슷한 고민을 나누며 긴장을 조금 내려놓았다.',effects:{멘탈:1}},
  {id:'family',stages:[...all,'student','auditioning'],category:'daily',title:'집에서 온 연락',text:'가족과 짧게 통화했다. 돌아갈 곳이 있다는 감각이 힘이 됐다.',effects:{멘탈:1}},
  {id:'mentor',stages:['trainee','debut_candidate'],category:'agency',title:'연습실의 피드백',text:'트레이너가 장점과 함께 다음 평가에서 보완할 점을 짚었다.',effects:{보컬:.4,댄스:.4}},
- {id:'join',stages:['trainee','debut_candidate'],category:'agency',title:'새로운 얼굴',text:'새 연습생이 합류했다. 연습실의 경쟁 구도가 조금 달라졌다.',environment:'rival'},
+ {id:'join',stages:['trainee','debut_candidate'],category:'agency',title:'새로운 얼굴',text:'새 연습생이 합류했다. 연습실의 경쟁 구도가 조금 달라졌다.',environment:'rival',trigger:'scheduled'},
  {id:'schedule',stages:['trainee','debut_candidate'],category:'agency',title:'합동 연습 일정',text:'소속사가 합동 연습 시간을 늘렸다. 각자의 강점을 맞춰보는 날이 많아졌다.',effects:{댄스:.4,체력:-.6}},
  {id:'room',stages:['trainee','debut_candidate'],category:'agency',title:'연습실 정비',text:'소속사가 녹음 장비를 점검했다. 피드백을 더 선명하게 들을 수 있게 됐다.',effects:{보컬:.3}},
  {id:'clip',stages:['idol','solo'],category:'career',title:'무대 밖의 반응',text:'짧은 무대 영상이 팬들 사이에서 공유되고 있다.',effects:{popularity:1.2}},
@@ -33,9 +34,10 @@ export const news = [
  {id:'chance-meeting',stages:['student','auditioning'],category:'daily',title:'새로운 인연',text:'동아리에서 다른 반 친구와 이야기를 나눴다. 서로 좋아하는 것이 비슷했다.',effects:{멘탈:.5}},
 
 ];
-export function newsAllowed(s,n){return n.stages.includes(s.stage)&&(!(n.category==='agency')||!!s.agency)&&(!['clip','stage','broadcast','fan','quiet'].includes(n.id)||s.debuted||(s.stage==='actor'&&s.popularity>=5&&s.credits>=1))&&(!['clip','stage','broadcast'].includes(n.id)||(['idol','solo'].includes(s.stage)&&s.debuted&&!!s.agency&&(s.stage!=='idol'||!!s.group)))&&(!['mentor','join','schedule','room'].includes(n.id)||(['trainee','debut_candidate'].includes(s.stage)&&!!s.agency));}
+export function newsAllowed(s,n){return s.stage!=='ended'&&n.trigger!=='scheduled'&&n.stages.includes(s.stage)&&(!(n.category==='agency')||!!getAgency(s))&&(!['clip','stage','broadcast','fan','quiet'].includes(n.id)||s.debuted||(s.stage==='actor'&&s.popularity>=5&&s.credits>=1))&&(!['clip','stage','broadcast'].includes(n.id)||(['idol','solo'].includes(s.stage)&&s.debuted&&!!getAgency(s)&&(s.stage!=='idol'||!!getGroup(s))))&&(!['mentor','join','schedule','room'].includes(n.id)||(['trainee','debut_candidate'].includes(s.stage)&&!!getAgency(s)));}
 const c=(id,label,hint='')=>({id,label,hint});
 export const decisions={
+ meet_trainee:{title:'새 연습생과의 첫 만남',body:'새로운 동료에게 어떻게 다가갈까?',choices:[c('befriend','먼저 다가가 친해진다','친밀·신뢰 상승 · 경쟁까지 사라지지는 않음'),c('compete','실력을 비교하며 견제한다','경쟁 의식 상승 · 신뢰와 갈등에 영향'),c('distance','예의를 지키며 거리를 둔다','서로 알아가는 속도를 늦춤')]},
  student_future:{title:'꿈을 찾아가는 시간',body:'평범한 일상을 지내며 여러 가능성을 만나왔다. 연예계의 기회를 더 열어 둘지, 다른 일상의 이야기를 이어갈지 생각해 본다.',choices:[c('continue','일상을 지내며 기회를 더 기다린다'),c('finish','다른 꿈을 향해 이야기를 마무리한다')]},
  entry_offer:{title:'일상에서 찾아온 제안',body:'새로운 기회를 검토한다.',choices:[c('apply','심사에 참여'),c('decline','학교생활을 이어간다')]},
  contract:{title:'연습생 계약 제안',body:'오디션 담당자가 계약 조건을 설명했다. 비용과 연습 일정, 재평가 절차를 확인하고 결정한다.',choices:[c('accept','계약하고 연습생 생활 시작','프로젝트 선발 경쟁에 참여'),c('decline','제안을 거절하고 다시 준비','다른 진입 기회를 기다림')]},
@@ -51,8 +53,9 @@ export const decisions={
 };
 
 export function decisionAllowed(s,kind){
- const school=s.stage==='student',preparing=['trainee','debut_candidate'].includes(s.stage)&&!!s.agency&&!!s.project;
- const performing=['idol','solo'].includes(s.stage)&&s.debuted&&!!s.agency&&(s.stage!=='idol'||!!s.group);
+ const school=s.stage==='student',preparing=['trainee','debut_candidate'].includes(s.stage)&&!!getAgency(s)&&!!getProject(s);
+ const performing=['idol','solo'].includes(s.stage)&&s.debuted&&!!getAgency(s)&&(s.stage!=='idol'||!!getGroup(s));
+ if(kind==='meet_trainee')return s.stage==='trainee'&&!!getAgency(s)&&!!getProject(s);
  if(kind==='entry_offer'||kind==='student_future')return school&&!s.agency;
  if(kind==='contract')return s.stage==='auditioning'&&!s.agency&&!!s.entryRoute;
  if(kind==='final'||kind==='late')return preparing;
