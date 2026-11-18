@@ -1,7 +1,8 @@
+import {chooseWithReview as choose} from './helpers/contract.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createState,stats,save,readSave,KEY,validState} from '../js/state.js';
-import {begin,advanceDay,choose,nextDecision,setPolicy,transition,finish,probability,schedule,scheduledAllowed} from '../js/engine.js';
+import {begin,advanceDay,nextDecision,setPolicy,transition,finish,probability,schedule,scheduledAllowed} from '../js/engine.js';
 import {config} from '../js/config.js';
 import {createClock} from '../js/clock.js';
 import {dateAt,dateLabel} from '../js/calendar.js';

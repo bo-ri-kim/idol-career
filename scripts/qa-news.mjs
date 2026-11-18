@@ -7,7 +7,7 @@ export function auditNews(seeds=100){
  const policy={entry_offer:'apply',contract:'accept',meet_trainee:'befriend',relationship_moment:'cooperate',final:'challenge',retry:'retry',health:'rest',late:'actor',future:'continue',comeback:'steady',acting:'support',production:'coach',student_future:'continue'};
  for(let seed=1;seed<=seeds;seed++){
   const s=begin(createState('QA','랜덤',seed)),seen=new Set();let lastTopic=null,guard=0;
-  while(s.day<365&&s.stage!=='ended'&&guard++<2000){if(s.pending){choose(s,policy[s.pending.kind]||s.pending.choices[0].id);continue;}
+  while(s.day<365&&s.stage!=='ended'&&guard++<2000){if(s.pending){choose(s,s.pending.kind==='contract'&&s.pending.choices.find(c=>c.id==='accept')?.disabled?'consult':policy[s.pending.kind]||s.pending.choices[0].id);continue;}
    const start=s.history.length;advanceDay(s);
    for(const row of s.history.slice(start)){
     const legacy=news.find(n=>n.title===row.title);const id=row.eventId||legacy?.id;if(!id)continue;

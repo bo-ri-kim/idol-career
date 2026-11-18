@@ -1,7 +1,8 @@
+import {chooseWithReview as choose} from './helpers/contract.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createState,validState,save,readSave,KEY} from '../js/state.js';
-import {begin,advanceDay,choose,nextDecision,schedule,record,finish} from '../js/engine.js';
+import {begin,advanceDay,nextDecision,schedule,record,finish} from '../js/engine.js';
 import {entryRoutes,eligibleRoutes} from '../js/entry.js';
 import {news,newsAllowed} from '../js/events.js';
 import {entryEvidence,validStudentLife} from '../js/student-life.js';

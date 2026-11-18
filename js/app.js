@@ -1,5 +1,6 @@
+import {getOffer,offerView,priorities} from './agency.js';
 import {createState,stats,stages,save,readSave,clear,randomName} from './state.js';
-import {begin,choose,nextDecision,setPolicy,finish,probability} from './engine.js';
+import {begin,choose,nextDecision,setPolicy,finish,probability,setCareerPriority} from './engine.js';
 import {createClock} from './clock.js';
 import {config,policies,policyIds} from './config.js';
 import {dateLabel} from './calendar.js';
@@ -10,7 +11,7 @@ let state=null,clock=null,frame=null,storageOK=true,visibleCount=80,lastLog='',l
 const root=document.querySelector('#app');
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const money=n=>Math.round(n).toLocaleString('ko-KR');
-const header=()=>'<header><span class="brand">다음 무대<span class="accent">.</span></span><span class="version">IDOL LIFE / 0.2.8</span></header>';
+const header=()=>'<header><span class="brand">다음 무대<span class="accent">.</span></span><span class="version">IDOL LIFE / 0.2.9</span></header>';
 function persist(){if(state)storageOK=save(state);}
 function stopFrame(){if(frame!==null)cancelAnimationFrame(frame);frame=null;clock=null;}
 function home(){stopFrame();root.className='home-view';state=null;const {state:stored,message}=readSave();root.innerHTML=header()+`<section class="intro"><span class="eyebrow">AN ORDINARY DAY, AN UNKNOWN FUTURE</span><h1>결정의 순간 사이에도,<br>당신의 삶은 흐른다.</h1><p>학교와 집, 친구와 취미로 채워지는 하루.<br>평범한 학생의 일상에서 어떤 기회를 만나게 될까요?</p></section>${message?`<p class="storage-warning" role="status">${esc(message)}</p>`:''}<section class="card"><h2>새로운 이야기</h2><form id="create"><label for="name">이름</label><div class="field-row"><input id="name" maxlength="16" placeholder="비워두면 랜덤 생성" autocomplete="off"><button type="button" id="random">랜덤</button></div><label for="gender">성별</label><select id="gender"><option>랜덤</option><option>남성</option><option>여성</option></select><p class="hint">13~18세 · 배경과 능력치 랜덤 · 성별에 따른 실력 차이 없음</p><button class="primary wide">나의 일상 시작하기 →</button></form></section><button id="continue" class="wide" ${stored?'':'disabled'}>${stored?`${esc(stored.name)}의 이야기 이어하기`:'저장된 학생 시작 버전의 이야기가 없습니다'}</button><button id="reset" class="subtle wide">저장 초기화</button><p class="hint">×1에서 현실 4분 ≈ 게임 1년. 소식을 읽으며 천천히 지켜보세요. 시작하면 자동으로 진행됩니다.<br>이 브라우저에 저장되며, 창을 닫거나 다른 탭을 보는 동안에는 시간이 흐르지 않습니다.</p>`;
@@ -72,14 +73,19 @@ function renderRelationships(){
  const openIds=new Set(Array.from(area.querySelectorAll('details[open]')).map(d=>d.dataset.person));area.dataset.signature=signature;
  area.innerHTML=people.map(p=>{const r=state.relationships[p.id],history=p.history.map(id=>state.history.find(h=>h.id===id)).filter(Boolean).slice(-4).reverse();return `<details class="person" data-person="${p.id}" ${openIds.has(p.id)?'open':''}><summary>${esc(p.name)} <span class="meta">${personAge(state,p)}세 · ${esc(p.personality)}</span></summary><p class="hint">${esc(state.world.agencies[p.agencyId]?.name)} · ${p.groupId?esc(state.world.groups[p.groupId]?.name):p.status==='trainee'?'연습생':'활동 중'}</p><p class="relationship-values">친밀 ${Math.round(r.closeness)} · 신뢰 ${Math.round(r.trust)}<br>경쟁 ${Math.round(r.rivalry)} · 갈등 기록 ${r.conflicts.length}회</p>${r.commitment?`<p class="hint">${esc(r.commitment)}</p>`:''}${history.map(h=>`<p class="hint">${h.date} · ${esc(h.title)}</p>`).join('')||'<p class="hint">아직 함께한 주요 사건이 없습니다.</p>'}</details>`;}).join('');
 }
+function offerMarkup(){
+ const o=getOffer(state),v=offerView(state);if(!o||!v)return '';
+ return `<section class="offer-summary" aria-label="소속사 계약 정보"><h3>${esc(v.agency.name)} · ${esc(v.agency.scale)}</h3><p>${esc(v.agency.tendency)} 성향 · ${esc(v.agency.management)}<br>보유 자원 ${Math.round(v.agency.resources)}/100 (게임 지표)</p><dl><dt>훈련 장점</dt><dd>${esc(v.profile.strengths)}</dd><dt>회사 기대</dt><dd>${esc(v.profile.expectation)}<br>${esc(v.assessment)}<br>${esc(v.teamwork)}</dd><dt>실제 프로젝트</dt><dd>${v.projects.length?v.projects.map(p=>`${esc(p.id)} · ${esc(p.phase)}`).join('<br>'):'등록된 준비 프로젝트 없음 · 계약 후 편성 여부를 확인하며 데뷔 확정일은 미확인'}</dd><dt>확인된 검토 조건</dt><dd>${esc(o.terms.description)} · ${o.terms.reviewDays}일 후 정기 재검토<br>제안 기한 ${dateLabel(o.expiresAt)} · ${o.consulted?'조건 확인 완료':'보호자/동반자와 조건 확인 전'}</dd><dt>알려지지 않은 조건</dt><dd>${o.terms.uncertainties.map(esc).join('<br>')}</dd></dl><fieldset><legend>내가 중시하는 조건</legend><div class="offer-priorities">${Object.entries(priorities).map(([id,label])=>`<button type="button" data-priority="${id}" aria-pressed="${v.preference===id}">${esc(label)}</button>`).join('')}</div><p class="hint">${esc(v.fit)}</p></fieldset><p class="hint">회사 규모나 적합성 설명은 합격·지원·창작 권한을 보장하지 않습니다. ${esc(v.profile.risk)}.</p></section>`;
+}
 function renderDecision(){const p=state.pending,key=p?.id||'',area=document.querySelector('#decision'),banner=document.querySelector('#pending-decision');
  const deferred=!!p&&deferredDecisionId===key;banner.hidden=!deferred;
  if(!p){deferredDecisionId='';lastPending='';if(area.open)area.close();area.innerHTML='';return;}
  if(deferred){document.querySelector('#pending-title').textContent=p.title;if(area.open)area.close();return;}
  if(lastPending===key){if(!area.open)area.showModal();return;}lastPending=key;
  let hint='';if(p.kind==='final')hint=`현재 데뷔 가능성 약 ${Math.round(probability(state,'debut')*100)}% · 마지막 준비 기간의 실력에 따라 달라집니다.`;
- area.innerHTML=`<div class="decision-card"><span class="eyebrow">IMPORTANT DECISION · 시간 정지</span><h2 id="decision-title">${esc(p.title)}</h2><p>${esc(p.body)}</p>${hint?`<p class="hint">${hint}</p>`:''}<div class="choices">${p.choices.map((c,i)=>`<button data-choice="${c.id}"><span class="choice-number">0${i+1}</span><span>${esc(c.label)}${c.hint?`<span class="hint">${esc(c.hint)}</span>`:''}</span></button>`).join('')}</div><button id="defer-decision" class="subtle wide">나중에 결정하기 · 지난 소식 보기</button><p class="hint">팝업을 내려도 선택할 때까지 시간은 멈춰 있습니다.</p></div>`;
+ area.innerHTML=`<div class="decision-card"><span class="eyebrow">IMPORTANT DECISION · 시간 정지</span><h2 id="decision-title">${esc(p.title)}</h2><p>${esc(p.body)}</p>${hint?`<p class="hint">${hint}</p>`:''}${p.kind==='contract'?offerMarkup():''}<div class="choices">${p.choices.map((c,i)=>`<button data-choice="${c.id}" ${c.disabled?'disabled':''}><span class="choice-number">0${i+1}</span><span>${esc(c.label)}${c.hint?`<span class="hint">${esc(c.hint)}</span>`:''}</span></button>`).join('')}</div><button id="defer-decision" class="subtle wide">나중에 결정하기 · 지난 소식 보기</button><p class="hint">팝업을 내려도 선택할 때까지 시간은 멈춰 있습니다.</p></div>`;
  area.querySelectorAll('[data-choice]').forEach(b=>b.onclick=()=>{choose(state,b.dataset.choice,p.id);clock.reset(performance.now());persist();refresh();});
+ area.querySelectorAll('[data-priority]').forEach(b=>b.onclick=()=>{if(setCareerPriority(state,b.dataset.priority)){lastPending='';persist();renderDecision();area.querySelector(`[data-priority="${b.dataset.priority}"]`)?.focus();}});
  area.querySelector('#defer-decision').onclick=()=>{deferredDecisionId=p.id;clock.reset(performance.now());persist();refresh();document.querySelector('#reopen-decision').focus();};
  area.oncancel=e=>e.preventDefault();
  if(!area.open)area.showModal();

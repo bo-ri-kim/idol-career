@@ -1,3 +1,4 @@
+import {createOffer,getOffer,offerOpen,canSignOffer,contractDecision,priorities,trainingFactor,competitionFactor} from './agency.js';
 import {clubs,ensureStudentLife,studentAction,entryEvidence,evidenceRequired,evidenceEventId,growExposure,closeStudentActivity} from './student-life.js';
 import {selectNews} from './news-scheduler.js';
 import {rivalArc} from './event-pack.generated.js';
@@ -51,14 +52,18 @@ export function transition(s,to,{preserveQueue=false}={}){
 }
 function prompt(s,kind,data={}){
  if(s.pending||s.stage==='ended'||!decisionAllowed(s,kind))return false;
- let d=kind==='entry_offer'?routeDecision(data.route,s,data.sourceId):decisions[kind];if(kind==='meet_trainee'){const person=s.world.people[data.personId];d={...d,title:`새 연습생 ${person.name}`,body:`${getAgency(s).name}에 ${person.name}가 합류했다. ${person.personality} 성향의 동료에게 어떻게 다가갈까?`};}if(kind==='student_showcase'){const a=s.studentLife.activity;d={...d,title:`${clubs[a.kind].show}, 공개할까?`,body:`${clubs[a.kind].name}에서 합동 연습 ${a.practiceEventIds.length}회를 마쳤다. 공개 공연/영상의 원인이 되는 활동은 실제 기록으로 남는다. 공개 범위는 직접 정할 수 있다.`};}if(kind==='relationship_moment')d=relationshipMoment(s,data.personId);s.pending={...d,choices:d.choices.filter(c=>!(kind==='career'&&s.stage==='solo'&&c.id==='solo')).map(c=>({...c})),kind,data,id:`decision-${++s.serial}`,day:s.day};s.playing=false;s.remainder=0;
- record(s,d.title,'결정이 필요한 순간이다. 선택할 때까지 시간은 멈춘다.','decision',true,{...(data.personId?{personIds:[data.personId]}:{}),...(data.causeIds?{causeIds:data.causeIds,actorIds:['player'],resultIds:[],expiresAt:data.expiresAt??null}:{} )});return true;
+ let d=kind==='entry_offer'?routeDecision(data.route,s,data.sourceId):decisions[kind];if(kind==='contract'){d=contractDecision(s);data={...data,offerId:getOffer(s)?.id,agencyId:getOffer(s)?.agencyId};}if(!d)return false;if(kind==='meet_trainee'){const person=s.world.people[data.personId];d={...d,title:`새 연습생 ${person.name}`,body:`${getAgency(s).name}에 ${person.name}가 합류했다. ${person.personality} 성향의 동료에게 어떻게 다가갈까?`};}if(kind==='student_showcase'){const a=s.studentLife.activity;d={...d,title:`${clubs[a.kind].show}, 공개할까?`,body:`${clubs[a.kind].name}에서 합동 연습 ${a.practiceEventIds.length}회를 마쳤다. 공개 공연/영상의 원인이 되는 활동은 실제 기록으로 남는다. 공개 범위는 직접 정할 수 있다.`};}if(kind==='relationship_moment')d=relationshipMoment(s,data.personId);s.pending={...d,choices:d.choices.filter(c=>!(kind==='career'&&s.stage==='solo'&&c.id==='solo')).map(c=>({...c})),kind,data,id:`decision-${++s.serial}`,day:s.day};s.playing=false;s.remainder=0;
+ record(s,d.title,'결정이 필요한 순간이다. 선택할 때까지 시간은 멈춘다.','decision',true,{...(data.offerId?{offerId:data.offerId,agencyId:data.agencyId}:{}),...(data.personId?{personIds:[data.personId]}:{}),...(data.causeIds?{causeIds:data.causeIds,actorIds:['player'],resultIds:[],expiresAt:data.expiresAt??null}:{} )});return true;
+}
+export function setCareerPriority(s,id){
+ if(!priorities[id]||s.pending?.kind!=='contract'||!offerOpen(s))return false;
+ s.careerPriority=id;getOffer(s).preference=id;return true;
 }
 export function setPolicy(s,id){if(!policyIds(s.stage).includes(id)||s.stage==='ended'||s.pending)return false;s.policy=id;return true;}
 export function finish(s,reason='스스로 선택한 새로운 일상'){
  if(s.stage==='ended')return;
  if(['idol','solo'].includes(s.stage))s.idolRetired=true;
- closeStudentActivity(s);syncCareerWorld(s,s.stage,'ended');s.project=null;s.rivals=[];s.stage='ended';if(!policyIds('ended').includes(s.policy))s.policy='balanced';s.playing=false;s.pending=null;s.queue=[];s.remainder=0;s.ending=reason;
+ if(getOffer(s)&&getOffer(s).status!=='signed'){getOffer(s).status='expired';s.currentOfferId=null;}closeStudentActivity(s);syncCareerWorld(s,s.stage,'ended');s.project=null;s.rivals=[];s.stage='ended';if(!policyIds('ended').includes(s.policy))s.policy='balanced';s.playing=false;s.pending=null;s.queue=[];s.remainder=0;s.ending=reason;
  record(s,s.debuted||s.agency?'나의 마지막 인사':'또 다른 일상으로',reason,'career',true);
 }
 function startProject(s,delay=0){
@@ -82,9 +87,9 @@ export function probability(s,type,mode=''){
 }
 export function choose(s,id,decisionId=s.pending?.id){
  const p=s.pending;if(!p||p.id!==decisionId||s.stage==='ended'||!decisionAllowed(s,p.kind))return false;
- const c=p.choices.find(c=>c.id===id);if(!c)return false;if(p.kind==='entry_offer'&&evidenceRequired(p.data.route)&&!entryEvidence(s,p.data.route,p.data.sourceId))return false;
+ const c=p.choices.find(c=>c.id===id);if(!c||c.disabled)return false;if(p.kind==='contract'&&(!offerOpen(s)||p.data.offerId!==getOffer(s).id||p.data.agencyId!==getOffer(s).agencyId||(id==='accept'&&!canSignOffer(s))||(id==='hold'&&getOffer(s).holdCount>=1)||(id==='consult'&&getOffer(s).consulted)))return false;if(p.kind==='entry_offer'&&evidenceRequired(p.data.route)&&!entryEvidence(s,p.data.route,p.data.sourceId))return false;
  s.pending=null;s.decisionCount++;
- const choiceRecord=record(s,p.title,`선택: ${c.label}`,'decision',true,{choice:id,causeIds:p.data.causeIds||[],actorIds:['player'],resultIds:[],...(p.data.personId?{personIds:[p.data.personId]}:{})});
+ const choiceRecord=record(s,p.title,`선택: ${c.label}`,'decision',true,{choice:id,...(p.kind==='contract'?{offerId:p.data.offerId,agencyId:getOffer(s).agencyId}:{}),causeIds:p.data.causeIds||[],actorIds:['player'],resultIds:[],...(p.data.personId?{personIds:[p.data.personId]}:{})});
  switch(p.kind){
  case 'student_activity':{
   const life=ensureStudentLife(s);life.offeredAt=s.day;
@@ -103,15 +108,20 @@ export function choose(s,id,decisionId=s.pending?.id){
   if(id==='decline'){record(s,'제안을 거절하다',`${r.label} 제안은 정중히 거절했다. 친구와 가족이 있는 일상은 계속되고, 다른 기회도 열려 있다.`,'daily');s.routeHistory.push({route,day:s.day,result:'declined'});planStudent(s);}
   else {s.entryRoute=route;s.entryAttempts++;s.entrySourceId=p.data.sourceId||null;s.routeHistory.push({route,day:s.day,result:'applied',sourceId:s.entrySourceId,causeIds:p.data.causeIds||[]});transition(s,'auditioning');effects(s,{money:-r.cost});schedule(s,'audition-result',r.days,{route,sourceId:s.entrySourceId,causeIds:[choiceRecord.id]});record(s,'심사 결과를 기다리며',`${r.label}에 참여했다. 약 ${r.days}일 뒤 결과가 전해진다. 그동안에도 학교생활은 이어진다.`,'career',true,{causeIds:[choiceRecord.id],actorIds:['player'],resultIds:[],sourceId:s.entrySourceId});}break;}
  case 'contract':{
-  const route=s.entryRoute,r=entryRoutes[route];
+  const route=s.entryRoute,r=entryRoutes[route],offer=getOffer(s);
+  if(id==='consult'||id==='hold'){
+   if(id==='consult'){offer.status='reviewing';schedule(s,'offer-review',7,{offerId:offer.id,causeIds:[choiceRecord.id]});}
+   else{offer.status='held';offer.holdCount++;offer.expiresAt+=7;schedule(s,'offer-return',7,{offerId:offer.id,causeIds:[choiceRecord.id]});}
+   record(s,id==='consult'?'계약 조건을 함께 확인하다':'제안을 보류하다',`${s.world.agencies[offer.agencyId].name}의 제안을 ${id==='consult'?'보호자/신뢰할 수 있는 동반자와 검토한다':'바로 수락하지 않고 생각한다'}. 7일 뒤 같은 회사의 제안을 다시 검토하며, 아직 계약은 아니다.`,'career',true,{offerId:offer.id,agencyId:offer.agencyId,causeIds:[choiceRecord.id],resultIds:[]});break;
+  }
   if(id==='accept'){
    signContract(s,route);
    transition(s,route==='survival'?'debut_candidate':'trainee');
    effects(s,{멘탈:5});startProject(s);
    if(route==='survival'){getProject(s).phase='프로그램 선발 · 데뷔 프로젝트 준비';getProject(s).candidate=true;}
-   s.routeHistory.push({route,day:s.day,result:'contracted'});
-   record(s,'계약을 마치다',`${r.label} 심사를 거쳐 ${getAgency(s).name}과 계약했다. ${route==='survival'?'정규 연습생 과정을 대신해 프로그램 데뷔 프로젝트에 참가한다.':'이제 소속사 연습생 생활이 시작된다.'}`,'agency',true);
-  }else {s.routeHistory.push({route,day:s.day,result:'contract_declined'});transition(s,'student');s.entryRoute=null;record(s,'계약을 보류하다','아직 계약하지 않기로 했다. 소속사 없이 학교와 일상의 생활을 이어간다.','daily');planStudent(s);}break;}
+   s.routeHistory.push({route,day:s.day,result:'contracted',offerId:offer.id,agencyId:offer.agencyId});
+   record(s,'계약을 마치다',`${r.label} 심사를 거쳐 ${getAgency(s).name}과 계약했다. ${route==='survival'?'정규 연습생 과정을 대신해 프로그램 데뷔 프로젝트에 참가한다.':'이제 소속사 연습생 생활이 시작된다.'}`,'agency',true,{offerId:offer.id,agencyId:offer.agencyId,contractId:s.contract,causeIds:[choiceRecord.id,offer.consultationEventId],resultIds:[]});
+  }else {offer.status='declined';s.currentOfferId=null;s.routeHistory.push({route,day:s.day,result:'contract_declined',offerId:offer.id,agencyId:offer.agencyId});transition(s,'student');s.entryRoute=null;record(s,'계약을 보류하다','아직 계약하지 않기로 했다. 소속사 없이 학교와 일상의 생활을 이어간다.','daily');planStudent(s);}break;}
  case 'meet_trainee':{const personId=p.data.personId;relationshipChoice(s,personId,id,choiceRecord.id);record(s,'첫 만남 이후',`${s.world.people[personId].name}와의 첫 인사를 마쳤다. 이 선택은 다음 만남에도 남는다.`,'relationship',true,{personIds:[personId]});schedule(s,'relationship-followup',25,{personId,agencyId:s.agency},'world');break;}
  case 'relationship_moment':{
   const personId=p.data.personId,person=s.world.people[personId],change=chooseRelationshipMoment(s,personId,id,choiceRecord.id);effects(s,change);
@@ -139,6 +149,7 @@ export function choose(s,id,decisionId=s.pending?.id){
  if(s.stage!=='ended')s.playing=true;s.remainder=0;return true;
 }
 export function scheduledAllowed(s,type){
+ if(type==='offer-review'||type==='offer-return')return s.stage==='auditioning'&&!s.agency&&!!getOffer(s);
  if(type==='student-activity-offer')return s.stage==='student'&&!s.agency;
  if(['student-activity-rehearsal','student-showcase','student-performance','student-post-exposure'].includes(type))return schoolLife(s)&&!s.agency;
  if(type==='trainee-arrival')return s.stage==='trainee'&&!!getAgency(s)&&!!getProject(s);
@@ -196,11 +207,17 @@ function dueEvent(s,q){
   record(s,`${s.world.people[data.personId].name}와 준비한 결과`,result.text,'relationship',true,{personIds:[data.personId],changes:result.playerEffects,success:result.ok,relationshipResult:true});break;}
  case 'opportunity':if(s.stage==='student'){const route=pickRoute(s);if(route){s.lastEntryRoute=route;const evidence=entryEvidence(s,route);prompt(s,'entry_offer',{route,sourceId:evidence?.id||null,expiresAt:evidence?.expiresAt||null,causeIds:evidence?[evidenceEventId(evidence)]:[]});}else schedule(s,'opportunity',14);}break;
  case 'student-future':prompt(s,'student_future');break;
+ case 'offer-review':case 'offer-return':{
+  const o=getOffer(s);if(!o||data.offerId!==o.id||!['reviewing','held'].includes(o.status))break;
+  if(s.day>o.expiresAt){o.status='expired';s.currentOfferId=null;transition(s,'student');s.entryRoute=null;record(s,'계약 제안 기한이 지나다','계약은 체결되지 않았다. 일상을 이어가며 다른 기회를 기다린다.','career',true,{offerId:o.id,agencyId:o.agencyId});planStudent(s);break;}
+  o.status='open';const reviewed=type==='offer-review';
+  const row=record(s,reviewed?'조건 확인을 마치다':'보류한 제안을 다시 보다',`${s.world.agencies[o.agencyId].name}의 동일 제안을 다시 검토한다. ${reviewed?'교육 방향과 비용 분담·데뷔 일정의 미확인 사항을 동반자와 확인했다. 미확인 조건은 확정된 지원으로 취급하지 않는다.':'시간을 두고 검토했지만 계약은 자동 체결되지 않았다.'}`,'career',true,{offerId:o.id,agencyId:o.agencyId,offerAction:reviewed?'reviewed':'returned',causeIds:data.causeIds||[],resultIds:[]});
+  if(reviewed){o.consulted=true;o.consultationEventId=row.id;}prompt(s,'contract',{offerId:o.id,causeIds:[row.id]});break;}
  case 'audition-result':{
   const route=data.route,r=entryRoutes[route];if(evidenceRequired(route)&&!entryEvidence(s,route,data.sourceId||s.entrySourceId,true)){transition(s,'student');s.entryRoute=null;record(s,'심사 근거를 다시 확인하다','공개 활동 근거를 확인할 수 없어 심사를 진행하지 않았다. 학교생활로 돌아가 다른 기회를 기다린다.','daily',true);planStudent(s);break;}const ok=random(s)<entryProbability(s,route);
   s.routeHistory.push({route,day:s.day,result:ok?'passed':'failed'});
-  record(s,`${r.label} 심사 결과`,ok?'심사를 통과해 계약 조건을 검토할 수 있게 됐다. 아직 소속사 계약은 하지 않은 상태다.':'이번 심사에서는 선발되지 않았다. 학교로 돌아가 일상을 이어가며 다른 기회를 기다린다.','career',true,{success:ok,route,sourceId:data.sourceId||null,causeIds:data.causeIds||[],actorIds:['player'],resultIds:[]});
-  if(ok)prompt(s,'contract');else{effects(s,{멘탈:-2});transition(s,'student');s.entryRoute=null;planStudent(s);}break;}
+  const screening=record(s,`${r.label} 심사 결과`,ok?'심사를 통과해 계약 조건을 검토할 수 있게 됐다. 아직 소속사 계약은 하지 않은 상태다.':'이번 심사에서는 선발되지 않았다. 학교로 돌아가 일상을 이어가며 다른 기회를 기다린다.','career',true,{success:ok,route,sourceId:data.sourceId||null,causeIds:data.causeIds||[],actorIds:['player'],resultIds:[]});
+  if(ok){const o=createOffer(s,route,screening.id);const row=record(s,'회사 정보가 담긴 계약 제안',`${s.world.agencies[o.agencyId].name}에서 계약 검토를 제안했다. 회사와 조건을 먼저 확인한 뒤 수락 여부를 결정한다.`,'career',true,{offerId:o.id,agencyId:o.agencyId,causeIds:[screening.id],resultIds:[]});o.offerEventId=row.id;prompt(s,'contract',{offerId:o.id,causeIds:[row.id]});}else{effects(s,{멘탈:-2});transition(s,'student');s.entryRoute=null;planStudent(s);}break;}
  case 'project-announce':getProject(s).announced=true;getProject(s).phase='프로젝트 발표';record(s,'새 그룹 프로젝트',`${getAgency(s).name}에서 신규 그룹 데뷔 프로젝트를 발표했다. 선발 예정 인원은 ${getProject(s).slots}명이다.`,'agency',true);break;
  case 'project-candidates':{
   const score=(s.reviewScore+s.stats.스타성)/2+(getProject(s).relationshipScore||0);getProject(s).candidate=s.entryRoute==='survival'||score>=getRivals(s).reduce((a,r)=>a+r.score,0)/Math.max(1,s.rivals.length)-5;getProject(s).phase='후보 선발';getProject(s).score=score;if(getProject(s).candidate&&s.stage==='trainee')transition(s,'debut_candidate',{preserveQueue:true});
@@ -235,7 +252,7 @@ function dueEvent(s,q){
 function monthly(s){
  const before=s.lastMonthStats;const delta=Object.fromEntries(stats.map(k=>[k,Math.round((s.stats[k]-before[k])*10)/10]));
  const skill=(s.stats.보컬+s.stats.댄스+s.stats.스타성)/3;s.reviewScore=Math.round(skill*.8+s.stats.멘탈*.1+s.stats.체력*.1);
- if(preparing(s)&&s.agency){s.training++;getRivals(s).forEach(r=>r.score=clamp(r.score+random(s)*3-1));}
+ if(preparing(s)&&s.agency){s.training++;getRivals(s).forEach(r=>r.score=clamp(r.score+(random(s)*3-1)*competitionFactor(s)));}
  const student=schoolLife(s);const income=student?(s.family==='여유 있는 가정'?5:s.family==='평범한 가정'?2:1):active(s)?(s.onBreakUntil?8:20+s.popularity*.7):0;
  const expense=student?(s.family==='여유 있는 가정'?3:s.family==='평범한 가정'?1.5:.8):active(s)?12:s.family==='빠듯한 살림'?10:s.family==='여유 있는 가정'?2:5;
  const net=Math.round((income-expense)*10)/10;effects(s,{money:net,popularity:active(s)&&s.policy==='promotion'?.5:0});
@@ -248,14 +265,14 @@ export function advanceDay(s){
  // Also initializes ongoing contact for compatible v0.2.4 saves without replaying the first meeting.
  for(const [id,r] of Object.entries(s.relationships))if(r.approach&&sharesWork(s,id)){
   if(r.nextMomentDay===undefined)r.nextMomentDay=s.day+45;
-  if(s.day>=r.nextMomentDay&&!s.onBreakUntil&&!s.queue.some(q=>['relationship-moment','relationship-result','relationship-followup'].includes(q.type)&&q.data.personId===id)){
+  if(s.day>=r.nextMomentDay&&!(s.onBreakUntil>s.day)&&!s.queue.some(q=>['relationship-moment','relationship-result','relationship-followup'].includes(q.type)&&q.data.personId===id)){
    schedule(s,'relationship-moment',1,{personId:id,agencyId:s.agency},'world');r.nextMomentDay=s.day+65;
   }
  }
  const previous=dateAt(s.day);s.day++;const date=dateAt(s.day);s.age=s.startAge+date.getUTCFullYear()-START_YEAR;
  const resting=s.onBreakUntil>s.day||s.policy==='rest';const p=policies[resting?'rest':s.policy];
  if(schoolLife(s)){s.interest=clamp(s.interest+(s.policy==='hobby'?.06:0));s.snsActivity=clamp(s.snsActivity+(s.policy==='content'?.16:.01));s.social=clamp(s.social+(s.policy==='friends'?.06:0));s.schoolParticipation=clamp(s.schoolParticipation+(s.policy==='friends'?.06:.005));}
- const change=Object.fromEntries(Object.entries(p.growth).map(([k,v])=>[k,v/30.4375]));change.체력=-p.fatigue/30.4375;change.멘탈=(resting?2:.1)/30.4375;
+ const change=Object.fromEntries(Object.entries(p.growth).map(([k,v])=>[k,v*(preparing(s)&&!resting?trainingFactor(s,k):1)/30.4375]));change.체력=-p.fatigue/30.4375;change.멘탈=(resting?2:.1)/30.4375;
  if(s.policy==='promotion'&&!resting&&active(s))change.popularity=.8/30.4375;
  if(resting&&active(s))change.popularity=-.6/30.4375;
  effects(s,change);

@@ -4,7 +4,8 @@ import {entryEvidence,evidenceRequired} from '../js/student-life.js';
 export function studentChoice(s,kind='dance',visibility='public',followRoute=true){
  const p=s.pending;if(!p)return;
  const route={dance:'festival',music:'busking',video:'sns'}[kind];
- const id=p.kind==='student_activity'?kind:p.kind==='student_showcase'?visibility:p.kind==='entry_offer'?(followRoute&&p.data.route===route?'apply':'decline'):({contract:'accept',meet_trainee:'befriend',relationship_moment:'boundary',final:'challenge',retry:'retry',career:'renew',comeback:'steady',health:'rest',late:'actor',acting:'support',production:'coach',future:'continue',student_future:'continue'})[p.kind]||p.choices[0].id;
+ let id=p.kind==='student_activity'?kind:p.kind==='student_showcase'?visibility:p.kind==='entry_offer'?(followRoute&&p.data.route===route?'apply':'decline'):({contract:'accept',meet_trainee:'befriend',relationship_moment:'boundary',final:'challenge',retry:'retry',career:'renew',comeback:'steady',health:'rest',late:'actor',acting:'support',production:'coach',future:'continue',student_future:'continue'})[p.kind]||p.choices[0].id;
+ if(p.kind==='contract'&&s.pending.choices.find(c=>c.id==='accept')?.disabled)id='consult';
  if(!choose(s,id))throw Error(`Choice rejected: ${p.kind}/${id}`);
 }
 export function auditStudentLife(seeds=100,longRun=true){

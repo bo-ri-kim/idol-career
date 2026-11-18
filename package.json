@@ -8,6 +8,7 @@
     "build:content": "node scripts/build-event-pack.mjs",
     "check:content": "node scripts/build-event-pack.mjs --check",
     "qa:news": "node scripts/qa-news.mjs",
-    "qa:student": "node scripts/qa-student-life.mjs"
+    "qa:student": "node scripts/qa-student-life.mjs",
+    "qa:agency": "node scripts/qa-agency.mjs"
   }
 }

@@ -1,8 +1,9 @@
+import {chooseWithReview as choose} from './helpers/contract.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {execFileSync} from 'node:child_process';
 import {createState,validState,save,readSave} from '../js/state.js';
-import {begin,nextDecision,choose,advanceDay,finish,transition,probability} from '../js/engine.js';
+import {begin,nextDecision,advanceDay,finish,transition,probability} from '../js/engine.js';
 import {catalogue,eligibleNews,selectNews,ensureNewsMemory,TOPIC_COOLDOWN} from '../js/news-scheduler.js';
 import {packNews,rivalArc} from '../js/event-pack.generated.js';
 import {getProject,getGroup} from '../js/world.js';

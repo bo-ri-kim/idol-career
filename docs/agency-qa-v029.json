@@ -1,0 +1,47 @@
+{
+  "sourceMain": "9b25341be967db4da51197017336d94aaaf98ce2",
+  "policy": "seeds 1..100, normal entry attempts; decline first offer for seed%5=0, hold once for seed%3=0, always finish consultation before acceptance. Comparison changes only company identity in an internally consistent cloned offer for a controlled counterfactual. Fictional game balance, not industry statistics.",
+  "results": {
+    "seeds": 100,
+    "signed": 100,
+    "declined": 20,
+    "consultations": 100,
+    "holds": 33,
+    "byAgency": {
+      "orbit": 33,
+      "onair": 27,
+      "dawn": 38,
+      "program": 2
+    },
+    "byRoute": {
+      "audition": 49,
+      "street": 17,
+      "festival": 7,
+      "busking": 5,
+      "referral": 18,
+      "sns": 2,
+      "survival": 2
+    },
+    "identityMismatches": 0,
+    "invalidStates": 0,
+    "noContract": 0,
+    "comparison": [
+      {
+        "agencyId": "orbit",
+        "days": 31,
+        "policy": "balanced",
+        "danceGrowth": 1.375,
+        "rapGrowth": 0.606,
+        "rivalMeanChange": 0.415
+      },
+      {
+        "agencyId": "dawn",
+        "days": 31,
+        "policy": "balanced",
+        "danceGrowth": 0.917,
+        "rapGrowth": 0.962,
+        "rivalMeanChange": 0.239
+      }
+    ]
+  }
+}

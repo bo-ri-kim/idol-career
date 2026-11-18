@@ -1,9 +1,10 @@
+import {getOffer,canSignOffer} from './agency.js';
 import {random,clamp} from './random.js';
 import {dateAt} from './calendar.js';
 const statNames=['보컬','댄스','랩','연기','스타성','멘탈','체력'];
 export function createWorld(){
  const profiles=[['orbit','오르빗 뮤직','중형',65,'퍼포먼스','경쟁 평가 중심'],['dawn','새벽 엔터테인먼트','소형',40,'창작','소규모 밀착 지도'],['onair','온에어 스튜디오','중형',55,'방송','협업과 현장 경험 중심'],['program','프로그램 협력 기획사','대형',80,'방송','기수별 프로젝트 운영']];
- return {serial:0,agencies:Object.fromEntries(profiles.map(([id,name,scale,resources,tendency,management])=>[id,{id,name,scale,resources,tendency,management,changes:0,traineeIds:[],groupIds:[],projectIds:[],arrivalScheduled:false}])),people:{},groups:{},projects:{},contracts:{}};
+ return {serial:0,agencies:Object.fromEntries(profiles.map(([id,name,scale,resources,tendency,management])=>[id,{id,name,scale,resources,tendency,management,changes:0,traineeIds:[],groupIds:[],projectIds:[],arrivalScheduled:false}])),people:{},groups:{},projects:{},contracts:{},offers:{}};
 }
 export const getAgency=s=>s.world.agencies[s.agency]||null;
 export const getGroup=s=>s.world.groups[s.group]||null;
@@ -30,9 +31,9 @@ export function createPerson(s,agencyId,name=null){
  s.world.people[id]=p;add(agency.traineeIds,id);relationship(s,id);return p;
 }
 export function signContract(s,route){
- const ids=['orbit','dawn','onair'];s.agency=route==='survival'?'program':ids[Math.floor(random(s)*ids.length)];
+ const offer=getOffer(s);if(s.stage!=='auditioning'||!canSignOffer(s,offer)||offer.routeId!==route||s.entryRoute!==route||s.pending)throw Error('회사와 조건을 확인한 유효한 제안이 필요합니다.');s.agency=offer.agencyId;offer.status='signed';
  const id=`contract-${++s.world.serial}`;s.contract=id;
- s.world.contracts[id]={id,agencyId:s.agency,kind:route==='survival'?'프로젝트 참가':'연습생',startDay:s.day,reviewDay:s.day+720,endDay:null,status:'active',terms:'교육·활동 일정 협의, 정기 재평가',renewals:[]};
+ s.world.contracts[id]={id,agencyId:s.agency,offerId:offer.id,kind:route==='survival'?'프로젝트 참가':'연습생',startDay:s.day,reviewDay:s.day+offer.terms.reviewDays,endDay:null,status:'active',terms:offer.terms.description,renewals:[]};
  const a=getAgency(s);add(a.traineeIds,'player');a.resources=clamp(a.resources-1);
  s.rivals=[];for(let i=0;i<3;i++)s.rivals.push(createPerson(s,s.agency).id);
 }

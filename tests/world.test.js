@@ -1,7 +1,8 @@
+import {chooseWithReview as choose} from './helpers/contract.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createState,validState,save,readSave,KEY} from '../js/state.js';
-import {begin,choose,nextDecision,advanceDay,finish,scheduledAllowed,schedule,transition} from '../js/engine.js';
+import {begin,nextDecision,advanceDay,finish,scheduledAllowed,schedule,transition} from '../js/engine.js';
 import {news,newsAllowed,decisionAllowed} from '../js/events.js';
 import {getAgency,getProject,getGroup,getContract,getRivals,relationship,followupModel,resolveFollowup,validWorld,personAge,sharesWork,relationshipMoment,resolveRelationshipWork} from '../js/world.js';
 import {createClock} from '../js/clock.js';

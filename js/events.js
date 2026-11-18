@@ -1,3 +1,4 @@
+import {getOffer,offerOpen} from './agency.js';
 import {getAgency,getGroup,getProject} from './world.js';
 const all=['trainee','debut_candidate','idol','solo','actor','producer'];
 // General reports never stop the clock. Effects happen only when a report occurs.
@@ -43,7 +44,7 @@ export const decisions={
  meet_trainee:{title:'새 연습생과의 첫 만남',body:'새로운 동료에게 어떻게 다가갈까?',choices:[c('befriend','먼저 다가가 친해진다','친밀·신뢰 상승 · 경쟁까지 사라지지는 않음'),c('compete','실력을 비교하며 견제한다','경쟁 의식 상승 · 신뢰와 갈등에 영향'),c('distance','예의를 지키며 거리를 둔다','서로 알아가는 속도를 늦춤')]},
  student_future:{title:'꿈을 찾아가는 시간',body:'평범한 일상을 지내며 여러 가능성을 만나왔다. 연예계의 기회를 더 열어 둘지, 다른 일상의 이야기를 이어갈지 생각해 본다.',choices:[c('continue','일상을 지내며 기회를 더 기다린다'),c('finish','다른 꿈을 향해 이야기를 마무리한다')]},
  entry_offer:{title:'일상에서 찾아온 제안',body:'새로운 기회를 검토한다.',choices:[c('apply','심사에 참여'),c('decline','학교생활을 이어간다')]},
- contract:{title:'연습생 계약 제안',body:'오디션 담당자가 계약 조건을 설명했다. 비용과 연습 일정, 재평가 절차를 확인하고 결정한다.',choices:[c('accept','계약하고 연습생 생활 시작','프로젝트 선발 경쟁에 참여'),c('decline','제안을 거절하고 다시 준비','다른 진입 기회를 기다림')]},
+ contract:{title:'연습생 계약 제안',body:'오디션 담당자가 계약 조건을 설명했다. 비용과 연습 일정, 재평가 절차를 확인하고 결정한다.',choices:[c('accept','계약하고 연습생 생활 시작','프로젝트 선발 경쟁에 참여'),c('consult','보호자/동반자와 조건 확인'),c('hold','7일 더 생각하기'),c('decline','제안을 거절하고 다시 준비','다른 진입 기회를 기다림')]},
  final:{title:'최종 데뷔 평가',body:'수개월의 프로젝트 준비가 끝났다. 누적 실력, 월말 평가, 경쟁 구도와 이전 선택이 함께 반영된다.',choices:[c('challenge','최종 평가에 도전한다','한 달간 데뷔 준비 후 결과 발표'),c('delay','이번 기수는 미룬다','다음 프로젝트에서 재도전'),c('actor','연기로 방향을 바꾼다','배우 활동으로 전향')]},
  retry:{title:'다시 시작할 방향',body:'이번 데뷔조에는 합류하지 못했다. 다음 프로젝트를 기다리거나, 쌓은 경험으로 다른 분야에 도전할 수 있다.',choices:[c('retry','다음 데뷔 프로젝트에 재도전'),c('actor','배우로 전향'),c('producer','제작·트레이닝 분야로 전향'),c('retire','연예계 활동을 마무리')]},
  comeback:{title:'다음 작품의 방향',body:'새 음반 제작 일정이 잡혔다. 오늘 정한 방향의 반응은 발매 후에 알 수 있다.',choices:[c('bold','새로운 콘셉트에 투자','비용 50만원 · 성공 시 큰 반응, 실패 위험'),c('steady','강점을 살린 작품 제작','비용 20만원 · 완만한 반응'),c('break','활동을 쉬며 재정비','90일 공백 · 컨디션 회복, 인기 감소')]},
@@ -63,7 +64,7 @@ export function decisionAllowed(s,kind){
  if(kind==='relationship_moment')return preparing||(s.stage==='idol'&&performing);
  if(kind==='meet_trainee')return s.stage==='trainee'&&!!getAgency(s)&&!!getProject(s);
  if(kind==='entry_offer'||kind==='student_future')return school&&!s.agency;
- if(kind==='contract')return s.stage==='auditioning'&&!s.agency&&!!s.entryRoute;
+ if(kind==='contract')return s.stage==='auditioning'&&!s.agency&&!!s.entryRoute&&(s.world.offers===undefined||offerOpen(s,getOffer(s)));
  if(kind==='final'||kind==='late')return preparing;
  if(kind==='retry')return preparing&&s.stage==='trainee';
  if(kind==='comeback'||kind==='career')return performing;
