@@ -1,0 +1,2395 @@
+{
+  "sourceMain": "d996b044759724705e516a5f4719494eed2d2c24",
+  "jsonParseErrors": 0,
+  "enabledAmbient": 48,
+  "adaptedArcs": 1,
+  "adaptedArcUnits": 4,
+  "disabledAmbient": 252,
+  "disabledDecisions": 30,
+  "disabledDerived": 34,
+  "disabledArcs": 18,
+  "disabledArcUnits": 72,
+  "events": [
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_daily_001",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_daily_002",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_daily_003",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_daily_004",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_daily_005",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_daily_006",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_daily_007",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_daily_008",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_daily_009",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_daily_010",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_daily_011",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_daily_012",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_daily_013",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_daily_014",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_daily_015",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_daily_016",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_music_001",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_music_002",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_music_003",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_music_004",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_music_005",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_music_006",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_music_007",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_music_008",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_music_009",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_music_010",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_music_011",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_music_012",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_music_013",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_music_014",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_music_015",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_school_music_016",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_entry_signal_001",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_entry_signal_002",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_entry_signal_003",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_entry_signal_004",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_entry_signal_005",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_entry_signal_006",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_entry_signal_007",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_entry_signal_008",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_entry_signal_009",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_entry_signal_010",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_entry_signal_011",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_entry_signal_012",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_agency_contact_001",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_agency_contact_002",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_agency_contact_003",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_agency_contact_004",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_agency_contact_005",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_agency_contact_006",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_agency_contact_007",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_agency_contact_008",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_agency_contact_009",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_agency_contact_010",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_agency_contact_011",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_agency_contact_012",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_independent_001",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_independent_002",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_independent_003",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_independent_004",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_independent_005",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_independent_006",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_independent_007",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_independent_008",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_independent_009",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_student.json",
+      "id": "news_independent_010",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_daily_001",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_daily_002",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_daily_003",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_daily_004",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_daily_005",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_daily_006",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_daily_007",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_daily_008",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_daily_009",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_daily_010",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_daily_011",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_daily_012",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_daily_013",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_daily_014",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_daily_015",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_daily_016",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_people_001",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_people_002",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_people_003",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_people_004",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_people_005",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_people_006",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_people_007",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_people_008",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_people_009",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_people_010",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_people_011",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_people_012",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_people_013",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_people_014",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_eval_001",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_eval_002",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_eval_003",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_eval_004",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_eval_005",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_eval_006",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_eval_007",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_eval_008",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_eval_009",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_eval_010",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_eval_011",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_trainee_eval_012",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_predebut_001",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_predebut_002",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_predebut_003",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_predebut_004",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_predebut_005",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_predebut_006",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_predebut_007",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_predebut_008",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_predebut_009",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_predebut_010",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_predebut_011",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_predebut_012",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_financial_001",
+      "status": "disabled",
+      "reason": "실제 정산·비용·배분 내역 모델 없음"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_financial_002",
+      "status": "disabled",
+      "reason": "실제 정산·비용·배분 내역 모델 없음"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_financial_003",
+      "status": "disabled",
+      "reason": "실제 정산·비용·배분 내역 모델 없음"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_financial_004",
+      "status": "disabled",
+      "reason": "실제 정산·비용·배분 내역 모델 없음"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_financial_005",
+      "status": "disabled",
+      "reason": "실제 정산·비용·배분 내역 모델 없음"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_financial_006",
+      "status": "disabled",
+      "reason": "실제 정산·비용·배분 내역 모델 없음"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_financial_007",
+      "status": "disabled",
+      "reason": "실제 정산·비용·배분 내역 모델 없음"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_financial_008",
+      "status": "disabled",
+      "reason": "실제 정산·비용·배분 내역 모델 없음"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_financial_009",
+      "status": "disabled",
+      "reason": "실제 정산·비용·배분 내역 모델 없음"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_financial_010",
+      "status": "disabled",
+      "reason": "실제 정산·비용·배분 내역 모델 없음"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_financial_011",
+      "status": "disabled",
+      "reason": "실제 정산·비용·배분 내역 모델 없음"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_financial_012",
+      "status": "disabled",
+      "reason": "실제 정산·비용·배분 내역 모델 없음"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_health_001",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_health_002",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_health_003",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_health_004",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_health_005",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_health_006",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_health_007",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_health_008",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_health_009",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_health_010",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_health_011",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_trainee.json",
+      "id": "news_health_012",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_audition_001",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_audition_002",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_audition_003",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_audition_004",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_audition_005",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_audition_006",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_audition_007",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_audition_008",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_audition_009",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_audition_010",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_audition_011",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_audition_012",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_debut_stage_001",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_debut_stage_002",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_debut_stage_003",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_debut_stage_004",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_debut_stage_005",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_debut_stage_006",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_debut_stage_007",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_debut_stage_008",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_debut_stage_009",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_debut_stage_010",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_idol_schedule_001",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_idol_schedule_002",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_idol_schedule_003",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_idol_schedule_004",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_idol_schedule_005",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_idol_schedule_006",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_idol_schedule_007",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_idol_schedule_008",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_idol_schedule_009",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_idol_schedule_010",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_idol_schedule_011",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_idol_schedule_012",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_idol_schedule_013",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_idol_schedule_014",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_idol_schedule_015",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_idol_schedule_016",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_group_dynamics_001",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_group_dynamics_002",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_group_dynamics_003",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_group_dynamics_004",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_group_dynamics_005",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_group_dynamics_006",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_group_dynamics_007",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_group_dynamics_008",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_group_dynamics_009",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_group_dynamics_010",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_group_dynamics_011",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_group_dynamics_012",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_group_dynamics_013",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_group_dynamics_014",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_comeback_music_001",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_comeback_music_002",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_comeback_music_003",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_comeback_music_004",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_comeback_music_005",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_comeback_music_006",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_comeback_music_007",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_comeback_music_008",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_comeback_music_009",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_comeback_music_010",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_comeback_music_011",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_comeback_music_012",
+      "status": "enabled",
+      "reason": "검토한 현재 단계·소속·프로젝트·멤버·일정 조건으로 매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_comeback_music_013",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_comeback_music_014",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_comeback_music_015",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_comeback_music_016",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_charts_awards_001",
+      "status": "disabled",
+      "reason": "발매곡 ID·음원/음반/차트 집계 모델 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_charts_awards_002",
+      "status": "disabled",
+      "reason": "발매곡 ID·음원/음반/차트 집계 모델 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_charts_awards_003",
+      "status": "disabled",
+      "reason": "발매곡 ID·음원/음반/차트 집계 모델 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_charts_awards_004",
+      "status": "disabled",
+      "reason": "발매곡 ID·음원/음반/차트 집계 모델 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_charts_awards_005",
+      "status": "disabled",
+      "reason": "발매곡 ID·음원/음반/차트 집계 모델 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_charts_awards_006",
+      "status": "disabled",
+      "reason": "발매곡 ID·음원/음반/차트 집계 모델 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_charts_awards_007",
+      "status": "disabled",
+      "reason": "발매곡 ID·음원/음반/차트 집계 모델 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_charts_awards_008",
+      "status": "disabled",
+      "reason": "발매곡 ID·음원/음반/차트 집계 모델 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_charts_awards_009",
+      "status": "disabled",
+      "reason": "발매곡 ID·음원/음반/차트 집계 모델 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_charts_awards_010",
+      "status": "disabled",
+      "reason": "발매곡 ID·음원/음반/차트 집계 모델 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_charts_awards_011",
+      "status": "disabled",
+      "reason": "발매곡 ID·음원/음반/차트 집계 모델 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_charts_awards_012",
+      "status": "disabled",
+      "reason": "발매곡 ID·음원/음반/차트 집계 모델 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_charts_awards_013",
+      "status": "disabled",
+      "reason": "발매곡 ID·음원/음반/차트 집계 모델 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_charts_awards_014",
+      "status": "disabled",
+      "reason": "발매곡 ID·음원/음반/차트 집계 모델 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_charts_awards_015",
+      "status": "disabled",
+      "reason": "발매곡 ID·음원/음반/차트 집계 모델 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_charts_awards_016",
+      "status": "disabled",
+      "reason": "발매곡 ID·음원/음반/차트 집계 모델 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_fans_social_001",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_fans_social_002",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_fans_social_003",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_fans_social_004",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_fans_social_005",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_fans_social_006",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_fans_social_007",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_fans_social_008",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_fans_social_009",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_fans_social_010",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_fans_social_011",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_fans_social_012",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_fans_social_013",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_fans_social_014",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_fans_social_015",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_fans_social_016",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_broadcast_ad_001",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_broadcast_ad_002",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_broadcast_ad_003",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_broadcast_ad_004",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_broadcast_ad_005",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_broadcast_ad_006",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_broadcast_ad_007",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_broadcast_ad_008",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_broadcast_ad_009",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_broadcast_ad_010",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_broadcast_ad_011",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_broadcast_ad_012",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_tour_001",
+      "status": "disabled",
+      "reason": "실제 투어·도시·공연·티켓 기록 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_tour_002",
+      "status": "disabled",
+      "reason": "실제 투어·도시·공연·티켓 기록 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_tour_003",
+      "status": "disabled",
+      "reason": "실제 투어·도시·공연·티켓 기록 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_tour_004",
+      "status": "disabled",
+      "reason": "실제 투어·도시·공연·티켓 기록 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_tour_005",
+      "status": "disabled",
+      "reason": "실제 투어·도시·공연·티켓 기록 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_tour_006",
+      "status": "disabled",
+      "reason": "실제 투어·도시·공연·티켓 기록 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_tour_007",
+      "status": "disabled",
+      "reason": "실제 투어·도시·공연·티켓 기록 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_tour_008",
+      "status": "disabled",
+      "reason": "실제 투어·도시·공연·티켓 기록 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_tour_009",
+      "status": "disabled",
+      "reason": "실제 투어·도시·공연·티켓 기록 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_tour_010",
+      "status": "disabled",
+      "reason": "실제 투어·도시·공연·티켓 기록 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_tour_011",
+      "status": "disabled",
+      "reason": "실제 투어·도시·공연·티켓 기록 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_tour_012",
+      "status": "disabled",
+      "reason": "실제 투어·도시·공연·티켓 기록 없음"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_privacy_reputation_001",
+      "status": "disabled",
+      "reason": "공개 노출·위기 대응 상태 미매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_privacy_reputation_002",
+      "status": "disabled",
+      "reason": "공개 노출·위기 대응 상태 미매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_privacy_reputation_003",
+      "status": "disabled",
+      "reason": "공개 노출·위기 대응 상태 미매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_privacy_reputation_004",
+      "status": "disabled",
+      "reason": "공개 노출·위기 대응 상태 미매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_privacy_reputation_005",
+      "status": "disabled",
+      "reason": "공개 노출·위기 대응 상태 미매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_privacy_reputation_006",
+      "status": "disabled",
+      "reason": "공개 노출·위기 대응 상태 미매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_privacy_reputation_007",
+      "status": "disabled",
+      "reason": "공개 노출·위기 대응 상태 미매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_privacy_reputation_008",
+      "status": "disabled",
+      "reason": "공개 노출·위기 대응 상태 미매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_privacy_reputation_009",
+      "status": "disabled",
+      "reason": "공개 노출·위기 대응 상태 미매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_privacy_reputation_010",
+      "status": "disabled",
+      "reason": "공개 노출·위기 대응 상태 미매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_privacy_reputation_011",
+      "status": "disabled",
+      "reason": "공개 노출·위기 대응 상태 미매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_privacy_reputation_012",
+      "status": "disabled",
+      "reason": "공개 노출·위기 대응 상태 미매핑"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_late_career_001",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_late_career_002",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_late_career_003",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_late_career_004",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_late_career_005",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_late_career_006",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_late_career_007",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_late_career_008",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_late_career_009",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_late_career_010",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_late_career_011",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_late_career_012",
+      "status": "disabled",
+      "reason": "NEXT 소규모 대표 범위 외; 문장 전제와 선행 사건/상태의 추가 검토 필요"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_military_001",
+      "status": "disabled",
+      "reason": "국적·실제 자격·병역 상태 모델 없음; 성별 대체 금지"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_military_002",
+      "status": "disabled",
+      "reason": "국적·실제 자격·병역 상태 모델 없음; 성별 대체 금지"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_military_003",
+      "status": "disabled",
+      "reason": "국적·실제 자격·병역 상태 모델 없음; 성별 대체 금지"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_military_004",
+      "status": "disabled",
+      "reason": "국적·실제 자격·병역 상태 모델 없음; 성별 대체 금지"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_military_005",
+      "status": "disabled",
+      "reason": "국적·실제 자격·병역 상태 모델 없음; 성별 대체 금지"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_military_006",
+      "status": "disabled",
+      "reason": "국적·실제 자격·병역 상태 모델 없음; 성별 대체 금지"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_military_007",
+      "status": "disabled",
+      "reason": "국적·실제 자격·병역 상태 모델 없음; 성별 대체 금지"
+    },
+    {
+      "file": "ambient_debut.json",
+      "id": "news_military_008",
+      "status": "disabled",
+      "reason": "국적·실제 자격·병역 상태 모델 없음; 성별 대체 금지"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_school_festival",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_dance_club",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_independent_audition",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_street_offer",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_agency_compare",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_family_opposition",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_new_trainee",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_practice_feedback",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_team_feedback",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_mentor_request",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_debut_offer",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_concept_assignment",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_leader_role",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_line_distribution",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_rookie_variety",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_dating_approach",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_fancam_opportunity",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_sleeper_song",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_manager_conflict",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_injury_decision",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_privacy_breach",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_rumor_response",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_finance_review",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_tour_rest",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_contract_renewal",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_career_pivot",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_enlistment_planning",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_idol_first_win",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_advertisement_offer",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "decisions.json",
+      "id": "decision_retirement_after_event",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선택 효과/후속 조건과 기존 결정의 중복 검토 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_school_score",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_school_hobby",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_school_performance",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_student_interest",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_audition_count",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_agency_review",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_trainee_skill",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_trainee_fatigue",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_trainee_rank",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_trainee_attendance",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_trainee_peer",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_trainee_project",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_trainee_position",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_rookie_fan",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_group_fan",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_group_members",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_group_trust",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_song_release",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_song_peak",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_song_rechart",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_album_sales",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_music_show",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_content_views",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_solo_search",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_tour_sales",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_tour_fatigue",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_settlement",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_contract_deadline",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_advertisement_revenue",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_health_recovery",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_acting_audition",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_solo_release",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_major_milestone",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "derived.json",
+      "id": "derived_career_recap",
+      "units": 1,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 계산값·기간별 이력 검증 필요"
+    },
+    {
+      "file": "arcs.json",
+      "id": "arc_festival_to_audition",
+      "units": 4,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선행 단계·인물/곡/계약 등 실제 맥락과 결과 계산 연결 필요"
+    },
+    {
+      "file": "arcs.json",
+      "id": "arc_online_cover",
+      "units": 4,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선행 단계·인물/곡/계약 등 실제 맥락과 결과 계산 연결 필요"
+    },
+    {
+      "file": "arcs.json",
+      "id": "arc_audition_retry",
+      "units": 4,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선행 단계·인물/곡/계약 등 실제 맥락과 결과 계산 연결 필요"
+    },
+    {
+      "file": "arcs.json",
+      "id": "arc_trainee_mentor",
+      "units": 4,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선행 단계·인물/곡/계약 등 실제 맥락과 결과 계산 연결 필요"
+    },
+    {
+      "file": "arcs.json",
+      "id": "arc_trainee_rival",
+      "units": 4,
+      "status": "adapted",
+      "reason": "기존 실제 합류·확률 재회·인원 축소·최종 평가에 4단계 ID/맥락 연결; 고정 성공 문구/후보 효과/원본 지연값은 사용하지 않음"
+    },
+    {
+      "file": "arcs.json",
+      "id": "arc_debut_delayed",
+      "units": 4,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선행 단계·인물/곡/계약 등 실제 맥락과 결과 계산 연결 필요"
+    },
+    {
+      "file": "arcs.json",
+      "id": "arc_first_debut_week",
+      "units": 4,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선행 단계·인물/곡/계약 등 실제 맥락과 결과 계산 연결 필요"
+    },
+    {
+      "file": "arcs.json",
+      "id": "arc_center_tension",
+      "units": 4,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선행 단계·인물/곡/계약 등 실제 맥락과 결과 계산 연결 필요"
+    },
+    {
+      "file": "arcs.json",
+      "id": "arc_fancam_break",
+      "units": 4,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선행 단계·인물/곡/계약 등 실제 맥락과 결과 계산 연결 필요"
+    },
+    {
+      "file": "arcs.json",
+      "id": "arc_sleeper_rechart",
+      "units": 4,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선행 단계·인물/곡/계약 등 실제 맥락과 결과 계산 연결 필요"
+    },
+    {
+      "file": "arcs.json",
+      "id": "arc_fandom_growth",
+      "units": 4,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선행 단계·인물/곡/계약 등 실제 맥락과 결과 계산 연결 필요"
+    },
+    {
+      "file": "arcs.json",
+      "id": "arc_tour_exhaustion",
+      "units": 4,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선행 단계·인물/곡/계약 등 실제 맥락과 결과 계산 연결 필요"
+    },
+    {
+      "file": "arcs.json",
+      "id": "arc_finance_conflict",
+      "units": 4,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선행 단계·인물/곡/계약 등 실제 맥락과 결과 계산 연결 필요"
+    },
+    {
+      "file": "arcs.json",
+      "id": "arc_staff_conflict",
+      "units": 4,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선행 단계·인물/곡/계약 등 실제 맥락과 결과 계산 연결 필요"
+    },
+    {
+      "file": "arcs.json",
+      "id": "arc_privacy_protection",
+      "units": 4,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선행 단계·인물/곡/계약 등 실제 맥락과 결과 계산 연결 필요"
+    },
+    {
+      "file": "arcs.json",
+      "id": "arc_health_pause",
+      "units": 4,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선행 단계·인물/곡/계약 등 실제 맥락과 결과 계산 연결 필요"
+    },
+    {
+      "file": "arcs.json",
+      "id": "arc_contract_future",
+      "units": 4,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선행 단계·인물/곡/계약 등 실제 맥락과 결과 계산 연결 필요"
+    },
+    {
+      "file": "arcs.json",
+      "id": "arc_enlistment_return",
+      "units": 4,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선행 단계·인물/곡/계약 등 실제 맥락과 결과 계산 연결 필요"
+    },
+    {
+      "file": "arcs.json",
+      "id": "arc_second_act",
+      "units": 4,
+      "status": "disabled",
+      "reason": "NEXT 범위 외; 선행 단계·인물/곡/계약 등 실제 맥락과 결과 계산 연결 필요"
+    }
+  ]
+}

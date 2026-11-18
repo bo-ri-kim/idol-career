@@ -1,1 +1,12 @@
-{"name":"idol-career","private":true,"type":"module","scripts":{"test":"node --test","start":"python3 -m http.server 8080"}}
+{
+  "name": "idol-career",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test",
+    "start": "python3 -m http.server 8080",
+    "build:content": "node scripts/build-event-pack.mjs",
+    "check:content": "node scripts/build-event-pack.mjs --check",
+    "qa:news": "node scripts/qa-news.mjs"
+  }
+}

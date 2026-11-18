@@ -1,3 +1,4 @@
+import {validNewsMemory} from './news-scheduler.js';
 import {integer,random} from './random.js';
 import {policyIds,policies} from './config.js';
 import {decisions,decisionAllowed} from './events.js';
@@ -29,6 +30,7 @@ export function validState(s){
   if(!Array.isArray(s.history)||!s.history.every((h,i)=>Number.isInteger(h.day)&&h.day>=0&&h.day<=s.day&&(!i||h.day>=s.history[i-1].day)&&typeof h.title==='string'&&typeof h.text==='string')||!Array.isArray(s.milestones))return false;
   if(!Array.isArray(s.queue)||!s.queue.every(q=>Number.isInteger(q.id)&&Number.isInteger(q.due)&&q.due>=0&&queuedTypes.has(q.type)&&q.data&&typeof q.data==='object'&&(q.epoch===null||Number.isInteger(q.epoch))))return false;
   if(!Array.isArray(s.rivals)||!s.rivals.every(id=>typeof id==='string')||!Array.isArray(s.achievements)||!s.seen||typeof s.seen!=='object')return false;
+  if(!validNewsMemory(s))return false;
   if(!validWorld(s))return false;
   if(['trainee','debut_candidate'].includes(s.stage)&&(!getAgency(s)||!getProject(s)||!Number.isFinite(getProject(s).slots)||typeof getProject(s).phase!=='string'))return false;
   if(!Array.isArray(s.routeHistory)||typeof s.debuted!=='boolean')return false;

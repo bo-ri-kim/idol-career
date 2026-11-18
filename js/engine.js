@@ -1,14 +1,24 @@
+import {selectNews} from './news-scheduler.js';
+import {rivalArc} from './event-pack.generated.js';
 import {clamp,random} from './random.js';
 import {stats,stages} from './state.js';
 import {config,policies,policyIds} from './config.js';
 import {dateAt,START_YEAR,dateLabel} from './calendar.js';
-import {news,decisions,newsAllowed,decisionAllowed} from './events.js';
+import {decisions,decisionAllowed} from './events.js';
 import {entryRoutes,pickRoute,entryProbability,routeDecision} from './entry.js';
 import {getAgency,getGroup,getProject,getRivals,getContract,signContract,createPerson,createProject,createGroup,syncCareerWorld,renewContract,linkPeople,relationship,relationshipChoice,resolveFollowup,relationshipEvaluation,sharesWork,relationshipMoment,chooseRelationshipMoment,resolveRelationshipWork} from './world.js';
 const active=s=>['idol','solo','actor','producer'].includes(s.stage);
 export function record(s,title,text,category='career',important=false,extra={}){
  const row={id:++s.serial,day:s.day,date:dateLabel(s.day),stage:s.stage,title,text,category,important,...extra};s.history.push(row);linkPeople(s,row);
  if(important)s.milestones.push({day:s.day,title,text,stage:s.stage});return row;
+}
+// Map one reviewed pack arc onto real existing events; no second parallel story engine.
+function rivalArcStep(s,stage,personId=null){
+ const prior=s.history.filter(h=>h.arcId===rivalArc.id);
+ if(stage===1){if(prior.length)return {};return {arcId:rivalArc.id,arcStage:1,sourceEventId:rivalArc.stageIds[0],arcContext:{agencyId:s.agency,projectId:s.project,personId}};}
+ const last=prior.at(-1),context=last?.arcContext;
+ if(last?.arcStage!==stage-1||context.agencyId!==s.agency||context.projectId!==s.project||!s.rivals.includes(context.personId)||(personId&&context.personId!==personId))return {};
+ return {arcId:rivalArc.id,arcStage:stage,sourceEventId:rivalArc.stageIds[stage-1],arcContext:context,personIds:[context.personId]};
 }
 export function effects(s,values={}){for(const [k,v] of Object.entries(values)){if(stats.includes(k))s.stats[k]=clamp(s.stats[k]+v);else if(['money','popularity','credits'].includes(k))s[k]+=v;}s.money=Math.max(-5000,s.money);s.popularity=clamp(s.popularity);if(s.popularity>s.peak){s.peak=s.popularity;s.peakDay=s.day;}if(s.peak>=80&&!s.achievements.includes('글로벌 스타')&&['idol','solo'].includes(s.stage)){s.achievements.push('글로벌 스타');record(s,'국경을 넘은 이름','해외 팬들의 호응이 이어지며 글로벌 스타로 기록됐다.','career',true);}}
 export function schedule(s,type,delay,data={},scope='career'){
@@ -133,11 +143,11 @@ function dueEvent(s,q){
  switch(type){
  case 'trainee-arrival':{
   if(s.agency!==data.agencyId)break;const person=createPerson(s,s.agency);s.rivals.push(person.id);getProject(s).participantIds.push(person.id);getAgency(s).changes++;
-  record(s,'새 연습생 합류',`${getAgency(s).name}에 ${person.name}가 들어왔다. 같은 연습실에서 앞으로 자주 마주치게 된다.`,'agency',true,{personIds:[person.id]});prompt(s,'meet_trainee',{personId:person.id});break;}
+  record(s,'새 연습생 합류',`${getAgency(s).name}에 ${person.name}가 들어왔다. 같은 연습실에서 앞으로 자주 마주치게 된다.`,'agency',true,{personIds:[person.id],...rivalArcStep(s,1,person.id)});prompt(s,'meet_trainee',{personId:person.id});break;}
  case 'relationship-followup':{
   const person=s.world.people[data.personId];if(!person||person.agencyId!==s.agency||s.agency!==data.agencyId)break;const result=resolveFollowup(s,person.id);effects(s,result.playerEffects);
   relationship(s,person.id).nextMomentDay=s.day+20;
-  const row=record(s,`${person.name}와 다시 만난 날`,result.text,'relationship',true,{personIds:[person.id],outcome:result.outcome});const conflicts=relationship(s,person.id).conflicts;for(const c of conflicts)if(c.eventId===null)c.eventId=row.id;break;}
+  const row=record(s,`${person.name}와 다시 만난 날`,result.text,'relationship',true,{personIds:[person.id],outcome:result.outcome,...rivalArcStep(s,2,person.id)});const conflicts=relationship(s,person.id).conflicts;for(const c of conflicts)if(c.eventId===null)c.eventId=row.id;break;}
  case 'relationship-moment':if(sharesWork(s,data.personId)&&s.agency===data.agencyId)prompt(s,'relationship_moment',data);break;
  case 'relationship-result':{
   if(!sharesWork(s,data.personId)||s.agency!==data.agencyId)break;
@@ -154,8 +164,8 @@ function dueEvent(s,q){
  case 'project-candidates':{
   const score=(s.reviewScore+s.stats.스타성)/2+(getProject(s).relationshipScore||0);getProject(s).candidate=s.entryRoute==='survival'||score>=getRivals(s).reduce((a,r)=>a+r.score,0)/Math.max(1,s.rivals.length)-5;getProject(s).phase='후보 선발';getProject(s).score=score;if(getProject(s).candidate&&s.stage==='trainee')transition(s,'debut_candidate',{preserveQueue:true});
   record(s,'데뷔조 후보 발표',getProject(s).candidate?'지난 평가와 연습 성과를 바탕으로 데뷔조 후보에 이름을 올렸다.':'이번 후보 명단에는 들지 못했다. 최종 평가까지 실력을 보완할 기회는 남아 있다.','agency',true);break;}
- case 'project-cut':getProject(s).slots=3;getProject(s).phase='팀 구성 조정';getAgency(s).changes++;getRivals(s).forEach(r=>r.score=clamp(r.score+random(s)*5));record(s,'데뷔조 인원 조정','앞서 발표한 프로젝트의 인원이 4명에서 3명으로 줄었다. 경쟁 연습생들의 평가도 다시 반영된다.','agency',true);break;
- case 'project-final':getProject(s).phase='최종 평가';prompt(s,'final');break;
+ case 'project-cut':getProject(s).slots=3;getProject(s).phase='팀 구성 조정';getAgency(s).changes++;getRivals(s).forEach(r=>r.score=clamp(r.score+random(s)*5));record(s,'데뷔조 인원 조정','앞서 발표한 프로젝트의 인원이 4명에서 3명으로 줄었다. 경쟁 연습생들의 평가도 다시 반영된다.','agency',true,rivalArcStep(s,3));break;
+ case 'project-final':{getProject(s).phase='최종 평가';const arc=rivalArcStep(s,4);if(arc.arcId)record(s,'첫 만남에서 최종 평가까지',`${s.world.people[arc.arcContext.personId].name}와 쌓은 신뢰와 경쟁, 공동 준비 결과가 이번 평가에 반영된다. 프로젝트 관계 평가 ${getProject(s).relationshipScore||0}점 · 현재 데뷔 가능성 약 ${Math.round(probability(s,'debut')*100)}%. 최종 선발은 아직 확정되지 않았다.`,'relationship',true,arc);prompt(s,'final');break;}
  case 'debut-result':{
   const ok=random(s)<probability(s,'debut');s.attempts++;
   if(ok){s.debuted=true;const group=createGroup(s);transition(s,'idol');s.achievements.push('첫 데뷔');effects(s,{popularity:15,money:50,멘탈:8});record(s,'처음 팬을 만난 날',`${getGroup(s).name}의 데뷔 무대가 열렸다. 연습실에서 보낸 시간이 첫 활동으로 이어졌다.`,'career',true);startCareer(s);
@@ -216,11 +226,13 @@ export function advanceDay(s){
  while(s.queue.length&&s.queue[0].due<=s.day&&!s.pending){const q=s.queue.shift();if(q.epoch===null||q.epoch===s.epoch)dueEvent(s,q);}
  if(s.pending)return true;
  const rate=config.newsPerMonth[resting?'rest':s.stage]??2;
- if(random(s)<(rate-1)/30.4375){const pool=news.filter(n=>newsAllowed(s,n)&&(s.seen[n.id]===undefined||s.day-s.seen[n.id]>=35));
-  if(pool.length){const n=pool[Math.floor(random(s)*pool.length)];s.seen[n.id]=s.day;effects(s,n.effects);if(n.studentEffect==='sns')s.snsActivity=clamp(s.snsActivity+2);if(n.studentEffect==='interest')s.interest=clamp(s.interest+2);
-   if(n.id==='friend'&&getAgency(s)){const contacts=Object.values(s.world.people).filter(p=>p.agencyId===s.agency);if(contacts.length){const person=contacts[Math.floor(random(s)*contacts.length)],r=relationship(s,person.id);r.closeness=clamp(r.closeness+1);r.trust=clamp(r.trust+.5);record(s,n.title,`${person.name}와 식사하며 근황을 나눴다. 예전에 함께한 일들을 자연스럽게 떠올렸다.`,n.category,false,{personIds:[person.id]});}else record(s,n.title,n.text,n.category);}
-   else if(n.environment==='rival'&&s.rivals.length){const r=getRivals(s)[Math.floor(random(s)*s.rivals.length)];r.score=clamp(r.score+3);getAgency(s).changes++;record(s,n.title,`${n.text} ${r.name}의 최근 평가도 상승했다.`,n.category);}
-   else record(s,n.title,n.text,n.category);
+ if(random(s)<(rate-1)/30.4375){const n=selectNews(s);
+  if(n){effects(s,n.effects);if(n.studentEffect==='sns')s.snsActivity=clamp(s.snsActivity+2);if(n.studentEffect==='interest')s.interest=clamp(s.interest+2);
+   const extra={eventId:n.id,topic:n.topic,source:n.sourceFile?'event-pack-v03':'legacy',newsContext:{agencyId:s.agency,groupId:s.group,projectId:s.project,debuted:s.debuted},...(n.personId?{personIds:[n.personId]}:{})};
+   if(n.personId)record(s,n.title,n.text,n.category,false,extra);
+   else if(n.id==='friend'&&getAgency(s)){const contacts=Object.values(s.world.people).filter(p=>p.agencyId===s.agency);if(contacts.length){const person=contacts[Math.floor(random(s)*contacts.length)],r=relationship(s,person.id);r.closeness=clamp(r.closeness+1);r.trust=clamp(r.trust+.5);record(s,n.title,`${person.name}와 식사하며 근황을 나눴다. 예전에 함께한 일들을 자연스럽게 떠올렸다.`,n.category,false,{...extra,personIds:[person.id]});}else record(s,n.title,n.text,n.category,false,extra);}
+   else if(n.environment==='rival'&&s.rivals.length){const r=getRivals(s)[Math.floor(random(s)*s.rivals.length)];r.score=clamp(r.score+3);getAgency(s).changes++;record(s,n.title,`${n.text} ${r.name}의 최근 평가도 상승했다.`,n.category,false,extra);}
+   else record(s,n.title,n.text,n.category,false,extra);
   }
  }
  return true;
