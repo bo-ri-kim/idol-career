@@ -70,7 +70,8 @@ test('신뢰·경쟁이 다른 합동 준비는 같은 추첨에서도 성패와
  const first=resolveRelationshipWork(a,id,'cooperate',.5),second=resolveRelationshipWork(b,id,'cooperate',.5);assert(first.ok);assert(!second.ok);assert(getProject(a).relationshipScore>getProject(b).relationshipScore);
 });
 test('협력·독점·경계 선택의 비용과 관계 변화, 갈등에 맞는 후속 내용',()=>{
- const {s,id}=ongoing();const a=structuredClone(s),b=structuredClone(s),c=structuredClone(s);select(a,'cooperate');select(b,'compete');select(c,'boundary');assert(a.stats.체력<c.stats.체력);assert(b.relationships[id].rivalry>a.relationships[id].rivalry);assert(b.relationships[id].conflicts.length);assert(c.relationships[id].rivalry<s.relationships[id].rivalry);assert(!c.queue.some(q=>q.type==='relationship-result'));assert.notEqual(relationshipMoment(b,id).topic,'conflict'); // 경쟁 선택만으로 같은 파트 갈등이 확정되지는 않음
+ const {s,id}=ongoing();const a=structuredClone(s),b=structuredClone(s),c=structuredClone(s);select(a,'cooperate');select(b,'compete');select(c,'boundary');assert(a.stats.체력<c.stats.체력);assert(b.relationships[id].rivalry>a.relationships[id].rivalry);assert.equal(b.relationships[id].conflicts.length,s.relationships[id].conflicts.length); // 단독 준비만으로 갈등 확정 금지
+  assert(c.relationships[id].rivalry<s.relationships[id].rivalry);assert(!c.queue.some(q=>q.type==='relationship-result'));assert.notEqual(relationshipMoment(b,id).topic,'conflict'); // 경쟁 선택만으로 같은 파트 갈등이 확정되지는 않음
 });
 test('진행 중 평가도 저장 복원되고 v0.2.4 관계도 첫 만남 반복 없이 연결된다',()=>{
  const {s,id}=ongoing();select(s,'compete');const store=memory();save(s,store);const restored=readSave(store).state;assert(restored);days(s,14);days(restored,14);assert.deepEqual(s,restored);
