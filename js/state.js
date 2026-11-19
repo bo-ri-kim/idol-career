@@ -48,6 +48,15 @@ export function validState(s){
 }
 export function readSave(storage=globalThis.localStorage){try{const raw=storage.getItem(KEY);if(raw){const s=JSON.parse(raw);let message='';
  // A pending v0.2.9 comeback prompt is obsolete; preserve history and replace it with an agency event.
+ // Repeated v0.2.9 partner popups are stale when this person was already chosen before.
+ if(s.pending?.kind==='relationship_moment'){
+  const id=s.pending.data?.personId,contact=s.relationships?.[id];
+  if(contact?.lastAction&&!contact.momentProjectId){
+   contact.momentProjectId=s.stage==='idol'?s.group:s.project;
+   s.pending=null;s.playing=true;s.remainder=0;
+   message='반복되던 동료 결정 팝업은 종료하고 다른 연습생과의 일상을 이어갑니다.';
+  }
+ }
  if(s.pending?.kind==='comeback'){
   s.pending=null;s.playing=true;s.remainder=0;
   s.queue.push({id:++s.serial,type:'comeback',due:s.day+1,data:{},epoch:s.epoch});
