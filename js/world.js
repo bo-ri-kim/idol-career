@@ -35,7 +35,10 @@ export function signContract(s,route){
  const id=`contract-${++s.world.serial}`;s.contract=id;
  s.world.contracts[id]={id,agencyId:s.agency,offerId:offer.id,kind:route==='survival'?'프로젝트 참가':'연습생',startDay:s.day,reviewDay:s.day+offer.terms.reviewDays,endDay:null,status:'active',terms:offer.terms.description,renewals:[]};
  const a=getAgency(s);add(a.traineeIds,'player');a.resources=clamp(a.resources-1);
- s.rivals=[];for(let i=0;i<3;i++)s.rivals.push(createPerson(s,s.agency).id);
+ s.rivals=[];for(let i=0;i<3;i++){const person=createPerson(s,s.agency);s.rivals.push(person.id);
+  // Existing trainees must have lives and future interactions, not just the one who joins later.
+  const contact=relationship(s,person.id);contact.approach='acquaintance';contact.nextMomentDay=s.day+100+i*55;
+ }
 }
 export function createProject(s){
  const a=getAgency(s);if(!a)throw Error('계약 없이 프로젝트를 시작할 수 없습니다.');
@@ -122,19 +125,30 @@ export function validWorld(s){
 export function sharesWork(s,id){
  const p=s.world.people[id];return !!p&&p.agencyId===s.agency&&(['trainee','debut_candidate'].includes(s.stage)?s.rivals.includes(id):s.stage==='idol'&&getGroup(s)?.memberIds.includes(id));
 }
-export function relationshipMoment(s,id){
+export function relationshipMoment(s,id,requestedTopic=null){
  const p=s.world.people[id],r=relationship(s,id),group=s.stage==='idol';
- const conflict=r.rivalry>=40||r.trust<18||r.lastAction==='compete',pressure=!conflict&&r.closeness>=45;
- const topic=conflict?'conflict':pressure?'boundary':'practice';
- const title=conflict?`${p.name}와 겹친 ${group?'무대 파트':'평가 파트'}`:pressure?`${p.name}와 연습 시간의 경계`:`${p.name}의 ${group?'합동 무대':'합동 평가'} 제안`;
- const body=conflict?`이전 경쟁이 남아 있는 ${p.name}도 같은 파트를 원한다. 이번 일을 어떻게 풀지에 따라 다음 평가와 관계가 달라진다.`:pressure?`${p.name}가 개인 연습까지 계속 함께하길 바란다. 친한 사이지만 체력과 각자의 준비 시간에는 한계가 있다.`:`${p.name}가 함께 준비하자고 제안했다. 서로 피드백을 주고받으면 완성도를 높일 수 있지만, 연습 시간을 쓰고 평가 기회도 나눠야 한다.`;
- return {topic,title,body,choices:[
- {id:'cooperate',label:conflict?'파트를 조율하고 함께 준비한다':pressure?'시간을 더 내어 함께 연습한다':'합동 준비를 받아들인다',hint:'신뢰 상승 · 체력 -3 · 14일 뒤 합동 평가, 성과와 기회를 나눔'},
- {id:'compete',label:'내 파트를 확보하고 단독으로 준비한다',hint:'스타성 +1 · 신뢰 -6 · 경쟁 +10 · 14일 뒤 단독 평가'},
- {id:'boundary',label:conflict?'따로 대화해 경쟁의 선을 정한다':'개인 시간을 지키고 일정만 조율한다',hint:'멘탈 +2 · 과열된 경쟁 완화 · 이번 추가 평가 기회는 포기'}]};
+ const conflict=r.rivalry>=65||r.trust<12,pressure=!conflict&&r.closeness>=60;
+ const fallback=conflict?'conflict':pressure?'boundary':'practice';
+ const topic=['feedback','teamwork','routine','practice','conflict','boundary'].includes(requestedTopic)?requestedTopic:fallback;
+ const topics={
+  feedback:{title:`${p.name}와 평가 영상을 돌아보며`,body:`${p.name}가 지난 ${group?'무대':'연습'} 영상을 함께 보자고 제안했다. 각자 발견한 부족한 부분과 강점을 비교해 볼 기회다.`,joint:'서로의 피드백을 정리한다',solo:'내 약점부터 따로 연습한다',limit:'지금은 다음 일정에 집중한다'},
+  teamwork:{title:`${p.name}와 동선을 맞추는 날`,body:`${p.name}가 ${group?'공연':'합동 평가'} 동선을 다시 맞춰 보자고 했다. 시간을 더 쓰면 호흡을 맞출 수 있지만 개인 연습은 줄어든다.`,joint:'합동 연습을 더 진행한다',solo:'각자의 구간을 먼저 점검한다',limit:'연습 시간을 나눠 쓰기로 한다'},
+  routine:{title:`${p.name}와 연습실 일정 조율`,body:`${p.name}와 연습실 사용 시간이 겹쳤다. 불편한 다툼보다는 시간을 배분하고 서로의 계획을 맞출 수 있는 상황이다.`,joint:'시간을 함께 쓰며 도와준다',solo:'따로 연습할 시간을 확보한다',limit:'서로의 일정을 조정한다'},
+  practice:{title:`${p.name}의 ${group?'무대':'합동 평가'} 제안`,body:`${p.name}가 함께 준비하자고 제안했다. 연습을 나누면 완성도를 높일 수 있지만 각자의 준비 시간이 부족해질 수 있다.`,joint:'함께 연습을 진행한다',solo:'단독으로 준비한다',limit:'이번에는 일정만 조율한다'},
+  conflict:{title:`${p.name}와 평가 방식에 대한 이견`,body:`실제 평가 방식을 두고 ${p.name}와 의견이 달랐다. 관계에 경쟁심이 있지만 이견이 반드시 갈등으로 번질 필요는 없다.`,joint:'상대 의견을 듣고 함께 조율한다',solo:'내 방식으로 따로 준비한다',limit:'감정이 상하지 않게 거리를 둔다'},
+  boundary:{title:`${p.name}와 연습 시간의 경계`,body:`${p.name}가 개인 연습 시간에도 함께하자고 한다. 친밀한 사이더라도 각자의 일정과 체력은 따로 챙겨야 한다.`,joint:'시간을 더 내어 함께한다',solo:'오늘은 각자 연습한다',limit:'서로의 경계를 정한다'}
+ };
+ const scenario=topics[topic];
+ return {topic,title:scenario.title,body:scenario.body,choices:[
+  {id:'cooperate',label:scenario.joint,hint:'신뢰 상승 · 체력 -3 · 14일 뒤 준비 결과'},
+  {id:'compete',label:scenario.solo,hint:'개인 성과 기회 · 신뢰 -6 · 경쟁 +10 · 14일 뒤 준비 결과'},
+  {id:'boundary',label:scenario.limit,hint:'멘탈 +2 · 과열된 경쟁 완화 · 추가 평가 생략'}
+ ]};
 }
 export function chooseRelationshipMoment(s,id,choice,eventId){
- const r=relationship(s,id);r.lastAction=choice;r.nextMomentDay=s.day+65;
+ const r=relationship(s,id);r.lastAction=choice;r.nextMomentDay=s.day+180;
+ // One major decision per person in a training project or debut group.
+ r.momentProjectId=s.stage==='idol'?s.group:s.project;
  if(choice==='cooperate'){r.trust=clamp(r.trust+6);r.closeness=clamp(r.closeness+5);r.commitment='함께 준비 중';return {체력:-3};}
  if(choice==='compete'){r.trust=clamp(r.trust-6);r.rivalry=clamp(r.rivalry+10);r.commitment='같은 기회를 두고 경쟁 중';r.conflicts.push({day:s.day,eventId,reason:'평가 파트를 나누지 않고 단독으로 준비'});return {스타성:1,멘탈:-1};}
  r.trust=clamp(r.trust+2);r.rivalry=clamp(r.rivalry-8);r.commitment='개인 시간을 존중하기로 합의';return {멘탈:2};
