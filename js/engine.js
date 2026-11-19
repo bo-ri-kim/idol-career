@@ -168,7 +168,7 @@ export function choose(s,id,decisionId=s.pending?.id){
  case 'relationship_moment':{
   const personId=p.data.personId,person=s.world.people[personId],change=chooseRelationshipMoment(s,personId,id,choiceRecord.id);effects(s,change);
   record(s,`${person.name}와 정한 다음 일정`,id==='boundary'?'이번 추가 평가는 신청하지 않고 각자의 시간을 존중하기로 했다. 관계는 이어지며 다음 만남에서 다시 방향을 정할 수 있다.':`${person.name}와 ${id==='cooperate'?'함께':'각자'} 준비를 시작했다. 14일 뒤 실제 평가 결과가 전해진다.`,'relationship',true,{personIds:[personId],changes:change});
-  if(id!=='boundary')schedule(s,'relationship-result',14,{personId,agencyId:s.agency,mode:id},'world');break;}
+  if(id!=='boundary')schedule(s,'relationship-result',14,{personId,agencyId:s.agency,mode:id,topic:p.data.topic||'practice'},'world');break;}
  case 'student_future':if(id==='finish')finish(s,'연예계 진입 대신 지금의 일상과 다른 꿈을 이어가기로 했다.');else{s.studentReviewDay=s.day+365;record(s,'가능성을 열어 두다','일상을 이어가면서 새로운 기회가 오면 다시 생각해 보기로 했다.','daily');if(!s.queue.some(q=>q.type==='opportunity'))planStudent(s);else schedule(s,'student-future',365);}break;
  case 'final':
   if(id==='challenge'){const support=getProject(s).candidate;getProject(s).phase='최종 준비';transition(s,'debut_candidate');s.support=support;schedule(s,'debut-result',config.project.result,{projectId:getProject(s).id});record(s,'마지막 준비 기간','평가까지 30일. 지금까지의 훈련과 마지막 한 달의 컨디션이 결과에 반영된다.','agency',true);}
@@ -247,8 +247,8 @@ function dueEvent(s,q){
   case 'peer-encounter':peerEncounter(s,data.contextId);break;
  case 'relationship-result':{
   if(!sharesWork(s,data.personId)||s.agency!==data.agencyId)break;
-  const result=resolveRelationshipWork(s,data.personId,data.mode);effects(s,result.playerEffects);
-  record(s,`${s.world.people[data.personId].name}와 준비한 결과`,result.text,'relationship',true,{personIds:[data.personId],changes:result.playerEffects,success:result.ok,relationshipResult:true});break;}
+  const result=resolveRelationshipWork(s,data.personId,data.mode,undefined,data.topic||'practice');effects(s,result.playerEffects);
+  record(s,`${s.world.people[data.personId].name}와 준비한 결과`,result.text,'relationship',true,{personIds:[data.personId],changes:result.playerEffects,success:result.ok,relationshipResult:true,relationshipTopic:result.topic});break;}
  case 'opportunity':if(s.stage==='student'){const route=pickRoute(s);if(route){s.lastEntryRoute=route;const evidence=entryEvidence(s,route);prompt(s,'entry_offer',{route,sourceId:evidence?.id||null,expiresAt:evidence?.expiresAt||null,causeIds:evidence?[evidenceEventId(evidence)]:[]});}else schedule(s,'opportunity',14);}break;
  case 'student-future':prompt(s,'student_future');break;
  case 'offer-review':case 'offer-return':{
@@ -326,6 +326,7 @@ export function advanceDay(s){
    if(r.nextMomentDay===undefined)r.nextMomentDay=s.day+45;
    if(s.day>=r.nextMomentDay&&!(s.onBreakUntil>s.day)&&!s.queue.some(q=>['relationship-moment','relationship-result','relationship-followup'].includes(q.type)&&q.data.personId===id)){
     const topics=['feedback','teamwork','routine','practice'];
+    if(r.rivalry>=65&&random(s)<.18)topics.push('conflict');
     schedule(s,'relationship-moment',1,{personId:id,agencyId:s.agency,topic:topics[Math.floor(random(s)*topics.length)]},'world');
     r.nextMomentDay=s.day+180;
    }
