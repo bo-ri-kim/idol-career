@@ -52,7 +52,7 @@ export function transition(s,to,{preserveQueue=false}={}){
 }
 function prompt(s,kind,data={}){
  if(s.pending||s.stage==='ended'||!decisionAllowed(s,kind))return false;
- let d=kind==='entry_offer'?routeDecision(data.route,s,data.sourceId):decisions[kind];if(kind==='contract'){d=contractDecision(s);data={...data,offerId:getOffer(s)?.id,agencyId:getOffer(s)?.agencyId};}if(!d)return false;if(kind==='meet_trainee'){const person=s.world.people[data.personId];d={...d,title:`새 연습생 ${person.name}`,body:`${getAgency(s).name}에 ${person.name}가 합류했다. ${person.personality} 성향의 동료에게 어떻게 다가갈까?`};}if(kind==='student_showcase'){const a=s.studentLife.activity;d={...d,title:`${clubs[a.kind].show}, 공개할까?`,body:`${clubs[a.kind].name}에서 합동 연습 ${a.practiceEventIds.length}회를 마쳤다. 공개 공연/영상의 원인이 되는 활동은 실제 기록으로 남는다. 공개 범위는 직접 정할 수 있다.`};}if(kind==='relationship_moment')d=relationshipMoment(s,data.personId);s.pending={...d,choices:d.choices.filter(c=>!(kind==='career'&&s.stage==='solo'&&c.id==='solo')).map(c=>({...c})),kind,data,id:`decision-${++s.serial}`,day:s.day};s.playing=false;s.remainder=0;
+ let d=kind==='entry_offer'?routeDecision(data.route,s,data.sourceId):decisions[kind];if(kind==='contract'){d=contractDecision(s);data={...data,offerId:getOffer(s)?.id,agencyId:getOffer(s)?.agencyId};}if(!d)return false;if(kind==='meet_trainee'){const person=s.world.people[data.personId];d={...d,title:`새 연습생 ${person.name}`,body:`${getAgency(s).name}에 ${person.name}가 합류했다. ${person.personality} 성향의 동료에게 어떻게 다가갈까?`};}if(kind==='student_showcase'){const a=s.studentLife.activity;d={...d,title:`${clubs[a.kind].show}, 공개할까?`,body:`${clubs[a.kind].name}에서 합동 연습 ${a.practiceEventIds.length}회를 마쳤다. 공개 공연/영상의 원인이 되는 활동은 실제 기록으로 남는다. 공개 범위는 직접 정할 수 있다.`};}if(kind==='relationship_moment')d=relationshipMoment(s,data.personId,data.topic);s.pending={...d,choices:d.choices.filter(c=>!(kind==='career'&&s.stage==='solo'&&c.id==='solo')).map(c=>({...c})),kind,data,id:`decision-${++s.serial}`,day:s.day};s.playing=false;s.remainder=0;
  record(s,d.title,'결정이 필요한 순간이다. 선택할 때까지 시간은 멈춘다.','decision',true,{...(data.offerId?{offerId:data.offerId,agencyId:data.agencyId}:{}),...(data.personId?{personIds:[data.personId]}:{}),...(data.causeIds?{causeIds:data.causeIds,actorIds:['player'],resultIds:[],expiresAt:data.expiresAt??null}:{} )});return true;
 }
 export function setCareerPriority(s,id){
@@ -69,13 +69,55 @@ export function finish(s,reason='스스로 선택한 새로운 일상'){
 function startProject(s,delay=0){
  const project=createProject(s),id=project.id;s.support=false;const agency=getAgency(s);if(s.stage==='trainee'&&!agency.arrivalScheduled){agency.arrivalScheduled=true;schedule(s,'trainee-arrival',12,{agencyId:agency.id},'world');}
  for(const [type,days] of Object.entries(config.project)){if(type==='result')continue;schedule(s,`project-${type}`,days+delay,{projectId:id});}
+ schedule(s,'peer-encounter',9+Math.floor(random(s)*6),{contextId:id});
 }
 function startCareer(s){
- if(['idol','solo'].includes(s.stage)){schedule(s,'comeback',90);schedule(s,'career',720);}
+ if(['idol','solo'].includes(s.stage)){schedule(s,'comeback',90);schedule(s,'career',720);if(s.stage==='idol')schedule(s,'peer-encounter',12,{contextId:s.group});}
  if(s.stage==='actor')schedule(s,'acting',75);
  if(s.stage==='producer')schedule(s,'production',75);
  if(['actor','producer'].includes(s.stage))schedule(s,'future',540);
 }
+// All original teammates take part in non-blocking encounters, not only the late arrival.
+function peerEncounter(s,contextId){
+ const group=s.stage==='idol',current=group?s.group:s.project;
+ if(!current||current!==contextId)return;
+ const peers=(group?(getGroup(s)?.memberIds||[]).filter(id=>id!=='player').map(id=>s.world.people[id]):getRivals(s)).filter(p=>p?.agencyId===s.agency);
+ if(!peers.length)return;
+ const previous=s.history.filter(h=>h.peerContextId===contextId);
+ const last=previous.at(-1)?.personIds?.[0];
+ let candidates=peers.filter(p=>p.id!==last);if(!candidates.length)candidates=peers;
+ const count=p=>previous.filter(h=>h.personIds?.includes(p.id)).length;
+ const least=Math.min(...candidates.map(count));candidates=candidates.filter(p=>count(p)===least);
+ const person=candidates[Math.floor(random(s)*candidates.length)],r=relationship(s,person.id);
+ const scenes=[
+ ['practice',group?'무대 연습 뒤 함께 동선을 다시 맞추며 작은 실수를 바로잡았다.':'합동 연습에서 서로 놓친 동작을 짚어 주었다.',1,1],
+ ['snack','연습을 마치고 편의점에서 간단한 간식을 고르며 근황을 나눴다.',2,0],
+ ['tip','어려운 동작에 대한 요령을 알려 주었다. 나도 내가 익힌 부분을 설명했다.',1,2],
+ ['mishap','연습 중 박자를 놓치는 바람에 둘 다 웃음을 터뜨리고 다시 시작했다.',1,0],
+ ['reflection',group?'지난 활동 영상을 돌려보며 다음 무대에서 고칠 부분을 이야기했다.':'서로의 평가 준비를 보며 다른 훈련 방법을 발견했다.',0,2],
+ ['quiet','같은 연습실에서 각자의 과제를 하며 조용히 하루를 보냈다.',0,0],
+ ['support','긴 연습 끝에 오늘도 수고했다는 짧은 격려를 건넸다.',1,1],
+ ['schedule','연습실 사용 시간이 겹쳤지만 대화로 일정을 조정했다.',0,1]
+ ];
+ const recent=previous.slice(-4).map(h=>h.peerTopic);
+ const available=scenes.filter(([t])=>!recent.includes(t)),pool=available.length?available:scenes;
+ const [topic,detail,closeness,trust]=pool[Math.floor(random(s)*pool.length)];
+ r.closeness=clamp(r.closeness+closeness);r.trust=clamp(r.trust+trust);
+ const titles={practice:'함께 맞춘 동작',snack:'연습 후의 편의점',tip:'서로 배우는 시간',mishap:'연습실의 작은 실수',reflection:'서로의 피드백',quiet:'조용한 연습실',support:'짧은 격려',schedule:'일정을 맞추며'};
+ record(s,titles[topic],`${person.name}와 ${detail}`,'relationship',false,{personIds:[person.id],peerTopic:topic,peerContextId:contextId});
+ schedule(s,'peer-encounter',22+Math.floor(random(s)*28),{contextId});
+}
+// Releases are planned by a fictional agency, not chosen by a newly debuted idol.
+function companyPlansComeback(s){
+ const agency=getAgency(s);if(!agency)return;
+ if(s.onBreakUntil>s.day){schedule(s,'comeback',s.onBreakUntil-s.day+12);return;}
+ const roll=random(s),type=roll<.09&&s.releaseSerial>=2?'정규앨범':roll<.66?'미니앨범':roll<.86?'싱글 앨범':'디지털 싱글';
+ const concept=agency.tendency==='퍼포먼스'?'퍼포먼스를 강조한 곡':agency.tendency==='창작'?'보컬과 표현을 강조한 곡':'방송 무대를 고려한 곡';
+ const delay=45+Math.floor(random(s)*60),artist=s.stage==='idol'?(getGroup(s)?.name||'그룹'):s.name;
+ const plan=record(s,'소속사의 새 활동 계획',`${agency.name}이 ${artist}의 ${type} 제작을 추진한다. ${concept}으로 약 ${delay}일간 준비하며, 나는 현재 연습 방침에 맞춰 참여한다.`,'career',true,{agencyId:s.agency,releaseType:type,groupId:s.group});
+ schedule(s,'release',delay,{managed:true,releaseType:type,agencyId:s.agency,planEventId:plan.id});
+}
+
 function changeCareer(s,to){transition(s,to);s.onBreakUntil=null;startCareer(s);}
 export function probability(s,type,mode=''){
  const p=config.probability;
@@ -155,6 +197,7 @@ export function scheduledAllowed(s,type){
  if(type==='trainee-arrival')return s.stage==='trainee'&&!!getAgency(s)&&!!getProject(s);
  if(type==='relationship-followup')return preparing(s)&&!!getAgency(s);
  if(type==='relationship-moment'||type==='relationship-result')return (preparing(s)||s.stage==='idol')&&!!getAgency(s);
+  if(type==='peer-encounter')return !!getAgency(s)&&(preparing(s)&&!!getProject(s)||s.stage==='idol'&&!!getGroup(s));
  if(type==='opportunity'||type==='student-future')return s.stage==='student'&&!s.agency;
  if(type==='audition-result')return s.stage==='auditioning'&&!s.agency&&!!entryRoutes[s.entryRoute];
  if(type.startsWith('project-')||type==='debut-result'||type==='retry')return preparing(s)&&!!getAgency(s)&&!!getProject(s);
@@ -201,6 +244,7 @@ function dueEvent(s,q){
   relationship(s,person.id).nextMomentDay=s.day+20;
   const row=record(s,`${person.name}와 다시 만난 날`,result.text,'relationship',true,{personIds:[person.id],outcome:result.outcome,...rivalArcStep(s,2,person.id)});const conflicts=relationship(s,person.id).conflicts;for(const c of conflicts)if(c.eventId===null)c.eventId=row.id;break;}
  case 'relationship-moment':if(sharesWork(s,data.personId)&&s.agency===data.agencyId)prompt(s,'relationship_moment',data);break;
+  case 'peer-encounter':peerEncounter(s,data.contextId);break;
  case 'relationship-result':{
   if(!sharesWork(s,data.personId)||s.agency!==data.agencyId)break;
   const result=resolveRelationshipWork(s,data.personId,data.mode);effects(s,result.playerEffects);
@@ -231,13 +275,18 @@ function dueEvent(s,q){
   }
   else {transition(s,'trainee');effects(s,{멘탈:-6});getProject(s).phase='평가 탈락 · 재정비';getProject(s).candidate=false;getProject(s).status='failed';record(s,'최종 평가 결과','이번 데뷔조에서는 제외됐다. 실력과 경력은 남고, 다음 방향을 고를 시간도 남아 있다.','career',true);schedule(s,'retry',30);}break;}
  case 'retry':prompt(s,s.attempts>=5||s.age>=27?'late':'retry');break;
- case 'comeback':prompt(s,'comeback');break;
+ case 'comeback':companyPlansComeback(s);break;
  case 'career':prompt(s,'career');break;
- case 'release':record(s,'새 음반 발매',`${data.release}번째 활동 음반이 공개됐다. 첫 반응은 2주간의 활동 뒤에 집계된다.`,'career',true);schedule(s,'reaction',14,data);break;
+ case 'release':{
+   if(data.managed&&data.agencyId!==s.agency)break;
+   if(data.managed)s.releaseSerial++;
+   const type=data.releaseType||'활동 음반',number=data.managed?s.releaseSerial:data.release;
+   record(s,'새 작품 발매',`${number}번째 발매 프로젝트인 ${type}이 공개됐다. 활동을 시작하고 첫 반응은 2주 뒤에 확인한다.`,'career',true,{releaseType:type,causeIds:data.planEventId?[data.planEventId]:[],agencyId:s.agency});
+   schedule(s,'reaction',14,{...data,release:number});break;}
  case 'reaction':{
   const p=clamp(.12+(s.stats.스타성+s.stats.보컬+s.stats.댄스)/3*.008+(s.policy==='promotion'?.08:0),.05,.95),ok=random(s)<p;
   effects(s,{popularity:ok?(data.mode==='bold'?18:9):-2,money:ok?150:15,credits:1,체력:-2});
-  record(s,'발매 후 첫 반응',ok?'앞서 발매한 작품의 무대가 퍼지며 새 팬들이 유입됐다.':'앞서 발매한 작품의 반응은 조용했다. 작은 무대 경험을 남기고 다음 활동을 준비한다.','career',true,{success:ok});schedule(s,'comeback',105);break;}
+  record(s,'발매 후 첫 반응',ok?'앞서 발매한 작품의 무대가 퍼지며 새 팬들이 유입됐다.':'앞서 발매한 작품의 반응은 조용했다. 작은 무대 경험을 남기고 다음 활동을 준비한다.','career',true,{success:ok});schedule(s,'comeback',120+Math.floor(random(s)*110));break;}
  case 'return':s.onBreakUntil=null;record(s,'활동 재개','재정비 기간을 마쳤다. 현재 활동 방침에 따라 다시 일정을 시작한다.','career',true);schedule(s,'comeback',30);break;
  case 'acting':prompt(s,'acting');break;
  case 'acting-result':{
@@ -264,12 +313,17 @@ export function advanceDay(s){
  if(!s.playing||s.pending||s.stage==='ended')return false;
  // Also initializes ongoing contact for compatible v0.2.4 saves without replaying the first meeting.
  for(const [id,r] of Object.entries(s.relationships))if(r.approach&&sharesWork(s,id)){
-  if(r.nextMomentDay===undefined)r.nextMomentDay=s.day+45;
-  if(s.day>=r.nextMomentDay&&!(s.onBreakUntil>s.day)&&!s.queue.some(q=>['relationship-moment','relationship-result','relationship-followup'].includes(q.type)&&q.data.personId===id)){
-   schedule(s,'relationship-moment',1,{personId:id,agencyId:s.agency},'world');r.nextMomentDay=s.day+65;
+   const contextId=s.stage==='idol'?s.group:s.project;
+   if(r.lastAction&&!r.momentProjectId)r.momentProjectId=contextId; // migrate completed old-save moments
+   if(r.momentProjectId===contextId)continue; // never repeat the same decision within this project
+   if(r.nextMomentDay===undefined)r.nextMomentDay=s.day+45;
+   if(s.day>=r.nextMomentDay&&!(s.onBreakUntil>s.day)&&!s.queue.some(q=>['relationship-moment','relationship-result','relationship-followup'].includes(q.type)&&q.data.personId===id)){
+    const topics=['feedback','teamwork','routine','practice'];
+    schedule(s,'relationship-moment',1,{personId:id,agencyId:s.agency,topic:topics[Math.floor(random(s)*topics.length)]},'world');
+    r.nextMomentDay=s.day+180;
+   }
   }
- }
- const previous=dateAt(s.day);s.day++;const date=dateAt(s.day);s.age=s.startAge+date.getUTCFullYear()-START_YEAR;
+  const previous=dateAt(s.day);s.day++;const date=dateAt(s.day);s.age=s.startAge+date.getUTCFullYear()-START_YEAR;
  const resting=s.onBreakUntil>s.day||s.policy==='rest';const p=policies[resting?'rest':s.policy];
  if(schoolLife(s)){s.interest=clamp(s.interest+(s.policy==='hobby'?.06:0));s.snsActivity=clamp(s.snsActivity+(s.policy==='content'?.16:.01));s.social=clamp(s.social+(s.policy==='friends'?.06:0));s.schoolParticipation=clamp(s.schoolParticipation+(s.policy==='friends'?.06:.005));}
  const change=Object.fromEntries(Object.entries(p.growth).map(([k,v])=>[k,v*(preparing(s)&&!resting?trainingFactor(s,k):1)/30.4375]));change.체력=-p.fatigue/30.4375;change.멘탈=(resting?2:.1)/30.4375;
