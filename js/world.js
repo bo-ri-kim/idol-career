@@ -150,10 +150,10 @@ export function chooseRelationshipMoment(s,id,choice,eventId){
  // One major decision per person in a training project or debut group.
  r.momentProjectId=s.stage==='idol'?s.group:s.project;
  if(choice==='cooperate'){r.trust=clamp(r.trust+6);r.closeness=clamp(r.closeness+5);r.commitment='함께 준비 중';return {체력:-3};}
- if(choice==='compete'){r.trust=clamp(r.trust-6);r.rivalry=clamp(r.rivalry+10);r.commitment='같은 기회를 두고 경쟁 중';r.conflicts.push({day:s.day,eventId,reason:'평가 파트를 나누지 않고 단독으로 준비'});return {스타성:1,멘탈:-1};}
+ if(choice==='compete'){r.trust=clamp(r.trust-6);r.rivalry=clamp(r.rivalry+10);r.commitment='개인 성과를 위해 따로 준비 중';return {스타성:1,멘탈:-1};}
  r.trust=clamp(r.trust+2);r.rivalry=clamp(r.rivalry-8);r.commitment='개인 시간을 존중하기로 합의';return {멘탈:2};
 }
-export function resolveRelationshipWork(s,id,mode,roll=random(s)){
+export function resolveRelationshipWork(s,id,mode,roll=random(s),topic='practice'){
  const p=s.world.people[id],r=relationship(s,id),group=s.stage==='idol',joint=mode==='cooperate';
  const skill=(s.stats.보컬+s.stats.댄스+p.stats.보컬+p.stats.댄스)/4;
  const chance=joint?clamp(.25+skill*.004+r.trust*.004-r.rivalry*.003,.15,.85):clamp(.30+(s.stats.스타성-p.score)*.006,.15,.75);
@@ -161,8 +161,11 @@ export function resolveRelationshipWork(s,id,mode,roll=random(s)){
  if(project)project.relationshipScore=clamp((project.relationshipScore||0)+score,-10,10);
  if(joint){r.trust=clamp(r.trust+(ok?4:-4));p.score=clamp(p.score+(ok?2:1));}
  else {r.rivalry=clamp(r.rivalry+(ok?4:7));p.score=clamp(p.score+2);}
- r.commitment=joint?(ok?'합동 평가를 함께 통과한 동료':'합동 평가의 아쉬움을 함께 남김'):(ok?'단독 파트를 얻었지만 경쟁은 남음':'파트 경쟁에서 한 차례 밀림');
+ r.commitment=joint?(ok?'협력 성과를 남긴 동료':'함께 준비한 결과를 돌아보는 중'):(ok?'개인 준비의 성과를 남김':'단독 준비를 다시 점검 중');
  const playerEffects=group?{popularity:ok?(joint?2:3):-1,체력:-1}:{댄스:joint&&ok?1:.3,멘탈:ok?1:-2};
- const text=`${p.name}와 ${joint?'함께 준비한':'각자 준비한'} ${group?'무대':'평가'}의 결과가 나왔다. ${joint?(ok?'서로 보완한 구간이 호평을 받았다. 신뢰가 쌓였지만 상대의 평가도 함께 올랐다.':'호흡이 맞지 않아 재연습이 필요했다. 가까운 사이여도 합동 준비가 늘 잘되지는 않았다.'):(ok?'원하던 단독 파트를 얻었다. 개인 성과는 커졌지만 파트를 놓친 상대와 경쟁은 더 깊어졌다.':'원하던 파트는 상대에게 돌아갔다. 단독 준비의 부담과 경쟁이 남았다.')} ${group?`활동 인기 ${playerEffects.popularity>0?'+':''}${playerEffects.popularity}.`:`이번 프로젝트 관계 평가 ${score>0?'+':''}${score}점 (누적 ${project?.relationshipScore||0}점).`}`;
- return {ok,text,playerEffects,chance,score};
+ const subjects={feedback:'평가 영상 피드백',teamwork:'합동 연습 동선',routine:'연습실 일정 조율',practice:group?'무대 연습':'합동 평가 준비',conflict:'평가 방식에 대한 이견',boundary:'서로의 연습 시간'};
+ const subject=subjects[topic]||subjects.practice;
+ const summary=joint?(ok?'서로의 의견을 반영한 준비가 좋은 평가를 받았다. 함께 성장한 만큼 상대의 평가도 올랐다.':'준비 과정에서 호흡이 어긋났다. 다음에는 연습 방법을 더 조율해야 한다.'):(ok?'개인적으로 준비한 부분에서 성과를 냈다. 다만 서로 다른 훈련 방식이 관계의 거리감을 조금 늘렸다.':'따로 준비한 구간은 기대만큼 잘되지 않았다. 서로 다른 접근의 장단점을 다시 생각하게 됐다.');
+ const text=`${p.name}와 다루었던 '${subject}'의 결과가 나왔다. ${summary} ${group?`활동 인기 ${playerEffects.popularity>0?'+':''}${playerEffects.popularity}.`:`이번 프로젝트 관계 평가 ${score>0?'+':''}${score}점 (누적 ${project?.relationshipScore||0}점).`}`;
+ return {ok,text,playerEffects,chance,score,topic};
 }
