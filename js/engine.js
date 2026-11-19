@@ -312,6 +312,10 @@ function monthly(s){
 export function advanceDay(s){
  if(!s.playing||s.pending||s.stage==='ended')return false;
  // Repair existing v0.2.9 saves: the old project has no peer events in its queue.
+ // Previously saved games created three original trainees without giving them story roles.
+ if(preparing(s))for(const [index,id] of s.rivals.entries()){
+  const contact=relationship(s,id);if(contact&&!contact.approach){contact.approach='acquaintance';contact.nextMomentDay??=s.day+100+index*45;}
+ }
  const peerContextId=preparing(s)?s.project:s.stage==='idol'?s.group:null;
  if(peerContextId&&!s.queue.some(q=>q.type==='peer-encounter'&&q.data.contextId===peerContextId)
   &&!s.history.slice(-100).some(h=>h.peerContextId===peerContextId&&s.day-h.day<35)){
