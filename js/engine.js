@@ -311,6 +311,13 @@ function monthly(s){
 }
 export function advanceDay(s){
  if(!s.playing||s.pending||s.stage==='ended')return false;
+ // Repair existing v0.2.9 saves: the old project has no peer events in its queue.
+ const peerContextId=preparing(s)?s.project:s.stage==='idol'?s.group:null;
+ if(peerContextId&&!s.queue.some(q=>q.type==='peer-encounter'&&q.data.contextId===peerContextId)
+  &&!s.history.slice(-100).some(h=>h.peerContextId===peerContextId&&s.day-h.day<35)){
+  const people=preparing(s)?getRivals(s):getGroup(s)?.memberIds.filter(id=>id!=='player');
+  if(people?.length)schedule(s,'peer-encounter',7,{contextId:peerContextId});
+ }
  // Also initializes ongoing contact for compatible v0.2.4 saves without replaying the first meeting.
  for(const [id,r] of Object.entries(s.relationships))if(r.approach&&sharesWork(s,id)){
    const contextId=s.stage==='idol'?s.group:s.project;
